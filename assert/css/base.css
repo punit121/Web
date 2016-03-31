@@ -1,0 +1,126 @@
+
+/* reset */
+
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, form, fieldset, legend, button, input, textarea, th, td {
+  margin: 0;
+  padding: 0;
+}
+
+body, button, input, select, textarea { font: 12px/1.5 "Hiragino Sans GB", arial, tahoma, "SimSun", sans-serif; }
+
+body {
+  _background-image: url(about:blank);
+  /*用浏览器空白页面作为背景*/
+  _background-attachment: fixed;
+  position: relative;
+  background: #fff;
+  overflow: hidden;/* prevent screen flash in IE6 确保滚动条滚动时，元素不闪动*/
+}
+
+h1, h2, h3, h4, h5, h6 { font-size: 100%; }
+
+address, cite, dfn, em, var { font-style: normal; }
+
+code, kbd, pre, samp { font-family: courier new, courier, monospace; }
+
+small { font-size: 12px; }
+
+ul, ol { list-style: none; }
+
+img {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+a, a:link {
+  text-decoration: none;
+  color: #0076b3;
+}
+
+a:visited {
+  text-decoration: none;
+  color: #0076b3;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #0076b3;
+}
+
+a:active {
+  text-decoration: underline;
+  color: #F00;
+}
+
+a { outline: none; }
+
+ul, li { list-style: none; }
+
+i { font-style: normal; }
+
+body { }
+
+.zt_chongsu {
+  background: #000;
+  overflow: hidden;
+}
+
+.zt_chongsu div {
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.row {
+  position: relative;
+  background: url(images/bg.jpg) center;
+  overflow: hidden;
+}
+
+.row1 { background: #61c0e7; }
+
+.row2 { background: #01a96b; }
+
+.row3 { background: #fe8e06; }
+
+.row4 { background: #ed6374; }
+
+.row5 { background: #29ae8f; }
+
+.row6 { background: #fe8e06; }
+
+.wrapper {
+  position: relative;
+  -webkit-transition: -webkit-transform 1s ease;
+  -moz-transition: transform 1s ease;
+  -o-transition: transform 1s ease;
+  -ms-transition: transform 1s ease;
+  transition: transform 1s ease;
+}
+
+.nav {
+  position: fixed;
+  width: 20px;
+  height: 160px;
+  margin-top: -80px;
+  top: 50%;
+  right: 50px;
+  z-index: 20000;
+}
+
+.nav .dot {
+  cursor: pointer;
+  width: 15px;
+  height: 15px;
+  margin-top: 8px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.5);
+}
+
+.nav .cursor { background: #5647c8; }
+h1 { color:#fff; text-align:center; padding-top:6em; font-size:32px;}
