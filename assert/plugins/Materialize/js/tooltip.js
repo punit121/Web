@@ -52,10 +52,10 @@
             started = true;
             newTooltip.velocity('stop');
             backdrop.velocity('stop');
-            newTooltip.css({ display: 'block', left: '0px', top: '0px' });
+            newTooltip.css({ display: 'block', left: '0px', top: '0px',width:'300px' });
 
             // Set Tooltip text
-            newTooltip.children('span').text(origin.attr('data-tooltip'));
+            newTooltip.children('span').html(origin.attr('data-tooltip'));
 
             // Tooltip positioning
             var originWidth = origin.outerWidth();

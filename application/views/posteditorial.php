@@ -14,15 +14,121 @@ function video_dv()
 	
 }
 </script>
+<script type="text/javascript">
+	function intro()
+{	
+	
+	//var intro=vpform.textdes1;
+	var j=0;
+	var title=document.getElementById("title").value;
+	if(title== "")
+	{
+		text='Title is required';
+		document.getElementById("title_valid").innerHTML=text;
+		document.getElementById("title_valid").style.color="red";
+		
+		j++;
+		window.location="#edform";
+	}	
+	else
+	{
+		text='&nbsp;';
+		document.getElementById("title_valid").innerHTML=text;
+			window.location="#edform";
+	}
+	
+	
+		//alert(i);
+     var textdes=document.getElementById("textdes");
+     var intro=document.getElementById("intro");
+	//alert(intro);
+	if(intro.value.length < 100)
+	{
+		//alert("Yes");
+     text='Minimum 100 characters required';
+     document.getElementById("text1").innerHTML=text;
+     document.getElementById("text1").style.color="red";
+     j++;
+     
+	}
+	else
+	{
+		text='&nbsp;'
+     document.getElementById("text1").innerHTML= text;
+     
+	}
+	if(textdes.value.length < 100)
+	{
+		//alert("Yes");
+     text='Minimum 100 characters required';
+     document.getElementById("text2").innerHTML=text;
+     document.getElementById("text2").style.color="red";
+     j++;
+     
+	}
+	else
+	{
+		text='&nbsp;'
+     document.getElementById("text2").innerHTML= text;
+     
+	}
+
+	var pic=edform.picintro.value;
+	if(pic=="")
+	{
+		//alert("Yes for pic");
+		text='Please upload an image';
+     document.getElementById("pic1").innerHTML=text;
+     document.getElementById("pic1").style.color="red";
+     	j++;
+	}
+	else
+	{
+		text='&nbsp;'
+     document.getElementById("pic1").innerHTML= text;
+     	
+	}
+	//alert(j);
+		if(j>0)
+		{
+			text="Please Fill in all the required fields";
+			document.getElementById("main").innerHTML=text;
+			document.getElementById("main").style.color="red";
+		return false;
+		}
+		else
+		{
+		return true;
+	}
+}
+
+
+function validate()
+{
+	return intro();
+}
+
+</script>
 <body style="background-color: #DCD9D9;">
 <?php if(empty($boards)){?>
 
-    <form action="<?= base_url();?>users/inserteditorialpost" method="post" id="edform" enctype="multipart/form-data">
+    <form action="<?= base_url();?>users/inserteditorialpost" method="post" id="edform" enctype="multipart/form-data" onSubmit="return validate()">
  <input type="hidden" value="<?= $this->uri->segment(2); ?>" name="catname" id="catname"/>
-<?php }else{ ?>
-<form action="<?= base_url();?>users/inserteditorialboard" method="post" id="edform" enctype="multipart/form-data">
+<?php }
+else if($this->uri->segment(3))
+{
+	?>
+	<form action="<?= base_url();?>users/inserteditorialboard" method="post" id="edform" enctype="multipart/form-data" onSubmit="return validate()">
 
-<input type="hidden" value="<?= $this->uri->segment(2); ?>" name="boardcat" id="boardcat"/>
+<input type="hidden" value="NULL" name="boardcat" id="boardcat"/>
+ <input type="hidden" value="<?= $boards[0]->category?>" name="catname" id="catname"/>
+ <input type="hidden" value="<?= $this->uri->segment(3)?>" name="sboard" id="sboard">
+	<?php
+}else{ 
+	$board=str_replace("%20"," ",$this->uri->segment(2));?>
+<form action="<?= base_url();?>users/inserteditorialboard" method="post" id="edform" enctype="multipart/form-data" onSubmit="return validate()">
+
+<input type="hidden" value="<?= $board ?>" name="boardcat" id="boardcat"/>
  <input type="hidden" value="<?= $boards[0]->category?>" name="catname" id="catname"/>
 <?php }?>
 	<div class="container main_container" style="width:600px">
@@ -43,12 +149,15 @@ function video_dv()
 							</select>
 							<?php } ?>
 			<div style="width: 100%;margin: 0 auto;">
-            <div style="width:30%; display:inline-block">
+            <div style="width:50%; display:inline-block">
+              <div id="main"> &nbsp; </div>
+                   
                     <input type="text" name="topic" id="topic" placeholder="Comma Seperate Topic" style="border: 0;" class="text_div">
                     <input type="hidden" name="realtopic" id="realtopic" value="" />
                    			
 			</div><div style="width:69%; display:inline-block"id="topicbtn"></div>
                     <input type="text" placeholder="Title" name="title" id="title" class="text_div1">
+                    <div id="title_valid"> &nbsp; </div>
 			 <div style="border:solid 1px gray;"><p style="display:inline-block;width: 3%;padding-left:10px;margin-bottom: 0px;">Intro</p><div class="txtarea" style="display:inline-block; border:none;width:95%;">	
             <section class="clearfix">
 				<div>
@@ -58,6 +167,7 @@ function video_dv()
 				
             </section>
 			</div></div>
+			 <div id="text1"> Please type minimum 100 characters </div>
             <div style="border-top:1px solid #555">
             <i class="fa fa-times"  onClick="readURLold('imgpicintro', 'closeimg','videoimg','imgselect' );" id="closeimg" style="position: absolute;margin-left: 40%;margin-top: 5px; display:none"></i>
                         <center>
@@ -76,6 +186,7 @@ function video_dv()
 			<div id="video_url_div" style="display:none;">
 			<input type="text" class="form-control" placeholder="Paste Youtyube Url">
 			</div>
+			<div id="pic1">  &nbsp; </div>
 			<div class="txt_append">
 			    <div style="border:solid 1px gray;"><p style="display:inline-block;width: 3%;padding-left:10px;margin-bottom: 0px;">1</p><div class="txtarea" style="display:inline-block; border:none;width:95%;">		
             <section class="clearfix">
@@ -90,7 +201,7 @@ function video_dv()
 				
 			
 		    </div>
-
+		     <div id="text2"> Please Type minimum 100 characters </div> 
 			</div>
 			<div style="margin-top: 10px;">
 				
@@ -103,7 +214,7 @@ function video_dv()
 							
 						</select>
 						<div class="btn-group">
-								<button type="submit" name="publish" id="publish" class="btn btn-danger">Publish</button>
+								<input type="submit" name="publish" id="publish" value="Publish" class="btn btn-danger" />
 								 <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" style="height:33px" aria-expanded="false">
 								<span class="caret"></span>
 								<span class="sr-only">Toggle Dropdown</span>
@@ -140,9 +251,9 @@ function video_dv()
                                 </div>
 							</div>
 					</div>
-                    <div style="text-align:right;display:none" id="loding" >
+                    <!--<div style="text-align:right;display:none" id="loding" >
                     <img src="<?= base_url()?>assert/images/uploading.gif" width="150px"/>
-                    </div>
+                    </div>-->
 				</div>
 			</div>
             </form>
@@ -202,5 +313,7 @@ $("#imgInp").change(function(){
 });
   </script>
  
+ <!-- Google Analytics Code -->
+   <?php include_once("analyticstracking.php") ?>
 </body>
 </html>

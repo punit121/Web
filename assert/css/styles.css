@@ -19,7 +19,7 @@ body {
     font: 14px/23px proxima-nova-alt, "Proxima Nova Alt", sans-serif;
 }
 
-h1, h2, h3, h4, b {
+h1, h2, h3, h4/*b*/ {
     font-weight: 300;
     font-family: bree-web, Bree, sans-serif;
 }
@@ -27,12 +27,12 @@ h2 {
     font-size: 28px;
     padding-bottom: 60px;
 }
-b {
+/*b {
     font-weight: 500;
     font-size: 16px;
 
     color: #c3522f;
-}
+}*/
 
 #logo {
     position: absolute;
@@ -433,7 +433,7 @@ b {
     height: 100%;
     top: 0;
     left: 0;
-} 
+}
 
 .sl-slide {
     z-index: 1;
@@ -566,7 +566,7 @@ p {
 }*/
 
 nav {
-    //bottom: 0;  
+    /* bottom: 0; */
     position: fixed;
     width: 100%;
     padding: 24px 0;
@@ -591,8 +591,8 @@ ul li {
 ul a {
     color: #FFF;
     text-decoration: none;
-	font-weight:bold;
-	font-size:18px;
+    font-weight:bold;
+    font-size:18px;
 }
 
 ul a:hover,
@@ -691,15 +691,15 @@ li,ul,body,input{margin:0; padding:0; list-style:none}
 }
 .form-control:-moz-placeholder{
     color: #DDDDDD;
-    opacity: 1;  
-}  
+    opacity: 1;
+}
 .form-control::-webkit-input-placeholder{
     color: #DDDDDD;
-    opacity: 1; 
-} 
+    opacity: 1;
+}
 .form-control:-ms-input-placeholder{
     color: #DDDDDD;
-    opacity: 1; 
+    opacity: 1;
 }
 /*     General overwrite     */
 a{
@@ -708,7 +708,7 @@ a{
 a:hover, a:focus {
     color: #109CFF;
 }
-a:focus, a:active, 
+a:focus, a:active,
 button::-moz-focus-inner,
 input[type="reset"]::-moz-focus-inner,
 input[type="button"]::-moz-focus-inner,
@@ -771,7 +771,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
     border-color: #05AE0E;
 }
 .has-error .form-control:focus{
-    border-color: #FF3B30; 
+    border-color: #FF3B30;
 }
 .input-group-addon {
     background-color: #FFFFFF;
@@ -1070,7 +1070,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
     overflow: hidden;
     border-radius: 50%;
     border: 1px solid #333333;
-    width: 60px; 
+    width: 60px;
     float: left;
 }
 .logo-container .brand{
@@ -1223,7 +1223,7 @@ label{
 .wizard-card > ul > li > a:hover, .wizard-card > ul > li > a:focus{
     background-color: #999999;
     cursor: default;
-} 
+}
 .wizard-card .btn{
     text-transform: uppercase;
 }
@@ -1519,12 +1519,12 @@ label{
 .custom-checkbox input[type="checkbox"]{
     margin: 0;
     position: absolute;
-    z-index: 2;            
+    z-index: 2;
     cursor: pointer;
     outline: none;
     opacity: 0;
     /* CSS hacks for older browsers */
-    _noFocusLine: expression(this.hideFocus=true); 
+    _noFocusLine: expression(this.hideFocus=true);
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
     filter: alpha(opacity=0);
     -khtml-opacity: 0;
@@ -1576,47 +1576,47 @@ input[type="submit"]:hover{
 
 .wizard-container{
 
-                padding-top: 100px;
-                z-index: 3;
-            }
-			
+    padding-top: 100px;
+    z-index: 3;
+}
+
 .card{
-               background-color: #FFFFFF;
-               padding: 0px 0 23px;
-               width: 100%;
-            }
- .wizard-card > ul > li{
-                text-align: center;
-            }	
+    background-color: #FFFFFF;
+    padding: 0px 0 23px;
+    width: 100%;
+}
+.wizard-card > ul > li{
+    text-align: center;
+}
 
 .wizard-card .tab-content{
-                min-height: 340px;
-                padding: 20px 10px;
-            }
-			
+    min-height: 340px;
+    padding: 20px 10px;
+}
+
 .wizard-card .choice{
-                text-align: center;
-                cursor: pointer;
-                margin-top: 20px;
-            }
+    text-align: center;
+    cursor: pointer;
+    margin-top: 20px;
+}
 .wizard-card .btn{
-                text-transform: uppercase;
-            }
+    text-transform: uppercase;
+}
 .btn-warning.btn-fill{
-                background-color:#999999;
-                border-color: #999999;
-            }
+    background-color:#999999;
+    border-color: #999999;
+}
 .btn-wd {
-                    min-width: 140px;
-                }
+    min-width: 140px;
+}
 .btn-fill{
-                color: #FFFFFF;
-                opacity: 1;
-            }
+    color: #FFFFFF;
+    opacity: 1;
+}
 
 .wysihtml5-sandbox
 {
-	
-	width:682px !important;
-	
-}			
+
+    width:682px !important;
+
+}

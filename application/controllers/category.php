@@ -26,7 +26,7 @@ class category extends CI_Controller {
 								'username'	=> $user->username,
 								'fullName'	=> $user->fullName,
 								'user_level'=> $user->userLevel,
-								'status'	=> ($user->activated == 1) ? STATUS_ACTIVATED : STATUS_NOT_ACTIVATED,
+								'status'	=> ($user->activated == 1) ? 'STATUS_ACTIVATED' : 'STATUS_NOT_ACTIVATED',
 						));
 			redirect('');
 			

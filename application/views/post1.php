@@ -5,7 +5,6 @@
 							//$(".classy-editor").ClassyEdit();
 						});
 					</script> 
-					<style>img{max-width: 200px;max-height: 200px;margin: 20px;border: 2px solid grey;}</style>
 <script>
 function video_dv(id)
 
@@ -14,104 +13,10 @@ function video_dv(id)
 	
 }
 </script>
-<script>
-
-window.onload = function() {
-var dropbox = document.getElementById("preview");
-var dropbox0 = document.getElementById("picintro0");
-
-function dragenter(e) {
-  e.stopPropagation();
-
-  e.preventDefault();
-  }
-
-function dragover(e) {
-
-  e.stopPropagation();
-  e.preventDefault();
-  }
-
-function drop(e) {
-
-  e.stopPropagation();
-  e.preventDefault();
-
-  var dt = e.dataTransfer;
-  var files = dt.files;
-
-  readURLmulti(files);
-  }
-
-  function drop0(e) {
-
-  e.stopPropagation();
-  e.preventDefault();
-  document.getElementById("try0").innerHTML = "poink";
-  var dt = e.dataTransfer;
-  var files = dt.files;
-
-  readURLsingle(files);
-  }
-
-dropbox.addEventListener("dragenter", dragenter, false);
-dropbox.addEventListener("dragover", dragover, false);
-dropbox.addEventListener("drop", drop, false); 
-
-dropbox0.addEventListener("dragenter", dragenter, false);
-dropbox0.addEventListener("dragover", dragover, false);
-dropbox0.addEventListener("drop", drop0, false);  
-
-
-}
-</script>
-<script>
-
-$(document).ready(function() {
-	var text_min = 10;
-    $('#title_feed').html('minimum of ' + text_min + ' characters required');
-
-    $('#title').keyup(function() {
-        var text_length = $('#title').val().length;
-        var texttit = $('#title').val();
-        
-        var text_remaining = text_min - text_length;
-
-        $('#title_feed').html('still ' + text_remaining +' characters remaining...');
-        $('#title_poo').html("' "+texttit+" '");
-        $('#title_poo1').html("' "+texttit+" '");   
-    });
-});
-
-
-    function formatText (tag) {
-        var selectedText = document.selection.createRange().text;
-
-        if (selectedText != "") {
-            var newText = "<" + tag + ">" + selectedText + "</" + tag + ">";
-            document.selection.createRange().text = newText;
-        }
-    }
-
-</script>
-
 <style>
 
 </style>
 <script> 
-$(document).ready(function() {
-    var text_min = 99;
-    $('#textdes1_feedback').html(text_min + ' characters remaining');
-
-    $('#textdes1').keyup(function() {
-        var text_length = $('#textdes1').val().length;
-        
-        var text_remaining = text_min - text_length;
-
-        $('#textdes1_feedback').html(text_remaining + ' characters remaining');
-        
-    });
-});
 function intro()
 {	
 	
@@ -122,8 +27,7 @@ function intro()
 	{
 		text='Title is required';
 		document.getElementById("title_valid").innerHTML=text;
-		document.getElementById("title").style.border="1px solid red";
-		document.getElementById("title_valid").style.marginTop="-20px";
+		document.getElementById("title_valid").style.color="red";
 		//location.href="#";
 		j++;
 		
@@ -221,10 +125,17 @@ function intro()
 	//alert(j);
 		if(j>0)
 		{
+			/*document.getElementById("publish").disabled = true;
+			document.getElementById("publish").value = "Publishing...";
+			document.getElementById("upsstatus").disabled = true;*/
 		return false;
 		}
 		else
 		{
+			/*document.getElementById("publish").disabled = true;
+			document.getElementById("publish").value = "Publishing...";
+			document.getElementById("upsstatus").disabled = true;*/
+		
 		return true;
 	}
 }
@@ -241,29 +152,39 @@ function validate()
 </script>
 
 <body style="background-color: #DCD9D9;">
-
-	<center>
-<div class="form-container" style="box-shadow:0px 0px 5px rgba(0,0,0,0.8); width:65%;height:500px;top:100px;position:relative;">
 <?php
 
 if(empty($boards)){
 	if(isset($error)) {?>
-
+	
  <form action="<?= base_url();?>users/insertvertualstory/<?= $this->uri->segment(3);?>" method="post" id="vpform" enctype="multipart/form-data" onSubmit="return validate();">
  <input type="hidden" value="<?= $this->uri->segment(3); ?>" name="catname" id="catname"/>
 <?php }else{ ?>
- <form action="<?= base_url();?>users/insertvertualstory/" method="post" id="vpform" name="vpform" enctype="multipart/form-data" onSubmit="return validate();" >
+ <form action="<?= base_url();?>users/insertvertualstory" method="post" id="vpform" name="vpform" enctype="multipart/form-data" onSubmit="return validate();" >
  <input type="hidden" value="<?= $this->uri->segment(2); ?>" name="catname" id="catname"/>
- <?php } } else {?>
-<form action="<?= base_url();?>users/insertvertualboard" method="post" id="vpform" name="vpform" enctype="multipart/form-data">
+ <?php } } 
+ else if($this->uri->segment(3))
+{
+	?>
+	<form action="<?= base_url();?>users/insertvertualboard" method="post" id="vpform" enctype="multipart/form-data" onSubmit="return validate();">
 
-<input type="hidden" value="<?= $this->uri->segment(2); ?>" name="boardcat" id="bardcat"/>
+<input type="hidden" value="NULL" name="boardcat" id="boardcat"/>
+ <input type="hidden" value="<?= $boards[0]->category?>" name="catname" id="catname"/>
+ <input type="hidden" value="<?= $this->uri->segment(3)?>" name="sboard" id="sboard">
+	<?php
+}
+else {
+ 	$board=str_replace("%20"," ",$this->uri->segment(2));?>
+<form action="<?= base_url();?>users/insertvertualboard" method="post" id="vpform" name="vpform" enctype="multipart/form-data" onSubmit="return validate();">
+
+<input type="hidden" value="<?= $board ?>" name="boardcat" id="bardcat"/>
  <input type="hidden" value="<?= $boards[0]->category?>" name="catname" id="catname"/>
 <?php }?>
 	<div class="col-sm-3"></div>
-	<div class="container main_container col-sm-12" style="padding-top: 50px;height:500px; border:none;">
+	<div class="container main_container col-sm-6" style="padding-top: 50px;">
      <a href="<?= base_url();?>"><i class="fa fa-times fa-2x popup_cross_icon"></i></a>
-	   
+	    <h2 class="text-center">Create Your Photo Story</h2> 
+     
 		<div class="main_div">
         						        <?php if(count($cat)){ ?>
 									<select name="sboard" id="sboard" class="text_div" style="font-family:'FontAwesome', Arial;border: solid 1px #ccc;">
@@ -283,108 +204,57 @@ if(empty($boards)){
          echo $this->input->post('picintro');
         } ?>
 
-			<div id="myCarousel" class="carousel slide" data-interval="false" style="min-height:400px;">
-   <!-- Carousel items -->
-  			<div class="carousel-inner">
-     			<div class="active item">
-     				<div class="form-group">
-     				 <h2 class="text-center" id="title_poo" style="border-bottom:1px solid grey">Create Your Photo Story</h2>
-     				 
-
-                    
+						
+						
+			<div class="form-group">
+                    <input type="text" name="topic" id="topic" placeholder="Please Enter Comma Separated Topics" class="text_div form-control"/>
                     <input type="hidden" name="realtopic" id="realtopic" value=""/>
                    			
-			</div>
-			<div id="topicbtn"></div>
+			</div><div id="topicbtn"></div>
+					<div id="title_valid"> &nbsp; </div>
                     <div class="form-group">
-					<input type="text" placeholder="Give Your Photo Story a Title" name="title" id="title" class="text_div1 form-control" required/></div>
-                    <div id="title_feed"> &nbsp; </div>
+					<input type="text" placeholder="Give Your Photo Story a Title" name="title" id="title" class="text_div1 form-control"/></div>
                     
-                   </div>
-
-
-     	<!-- start intro section888888888888888888888888888888888888888888888888888888888888888888888888888888-->
-                   <div class="item">
-
-     					            <div class="col-sm-12 " id="intro_section">
-<h2 class="text-center" id="title_poo1" style="border-bottom:1px solid grey">Create Your Photo Story</h2>
-
 			<p style="margin-top: 15px"><strong> Introduction: </strong></p>
 			<div id="text1"><!-- Please type minimum 100 characters --></div> 
-			<div class="row">
-			   	<div class="col-sm-4 col-sm-offset-8" id="intro-desc" style="float:right;display:inline;">
 			 <div class="txtarea form-group" style="border: 1px solid #999; border-radius: 6px;">	
             <section class="clearfix">
 				<div>
-					<div id="textdes1_feedback"></div>
-
-				<input type="button" value="b" onclick="formatText ('b');" />
-   				<input type="button" value="i" onclick="formatText ('i');" />
-    			<input type="button" value="u" onclick="formatText ('u');" />
-				<textarea  name="textdes1" id="textdes1" maxlength="99" required></textarea>
+				<textarea class="classy-editor_1" name="textdes1" id="textdes1"></textarea>
 				</div>
             </section>
 			</div>
-			</div>
-			<p id="try0"></p>
-			<div id="picintro0" style="background-color:red;height:100px;width:100px;"></div>
-            <div class="form-group text-center center-block col-sm-7 col-sm-offset-1" style="position:relative; top:-100px;" >
+            <div class="form-group text-center center-block">
 	<i class="fa fa-times"  id="closes" onClick="readURLold('imgpicintro', 'closes','vdolb','imglb' );" style="position: absolute;margin-left: 40%;margin-top: 5px;display:none;"></i>
-			<img id="imgpicintro" src="../assert/images/blank.png" class="imgprive img-responsive" alt="Your Image" style="height: 250px; border-left: 1px solid #999; margin-top: -20px; border-right: 1px solid #999; border-bottom: 1px solid #999;"/>
-                      	
+			<img id="imgpicintro" src="../assert/images/blank.png" class="imgprive img-responsive" alt="Your Image" style="height: 300px; border-left: 1px solid #999; margin-top: -20px; border-right: 1px solid #999; border-bottom: 1px solid #999;"/>
+                        	
               <label id="imglb" class="myLabel mylabel1"> <span class="fileinput-button">
-
                 <span><i class="fa fa-picture-o fa-3x" style="background: rgba(128, 128, 128, 0.17);margin: 10px;"> 
-				<!--<input type="file" onChange="readURL(this,'imgpicintro','closes','vdolb','imglb');" name="picintro" id="picintro" value="Upload Photo" /></i></span></span></label>
-				-->
-
-				<input type="file" onChange="readURLsingle(this.files);" name="picintro" id="picintro" value="Upload Photo" /></i></span></span></label>
-				<input type="text" name="topic" id="topic" placeholder="Please Enter Comma Separated Topics" class="text_div form-control"/>
+				<input type="file" onChange="readURL(this,'imgpicintro','closes','vdolb','imglb');" name="picintro" id="picintro" value="Upload Photo" class=" "/></i></span></span></label>
 			<!--	 <label id="vdolb" class="myLabel mylabel3" onclick="video_dv('video_url_div')"><span class="fileinput-button" style="margin-left:20px;">
                 <span><i class="fa fa-youtube-play fa-3x" style="background: rgba(128, 128, 128, 0.17);margin: 10px;"> 
 			</i></span></label>   -->		
 				</div>
-			</div>
 			<div id="video_url_div" style="display:none;">
 			<input type="text" class="form-control" placeholder="Paste Youtube Url"/>
-
 			</div>
-		</div>
-     				</div>
-     		<!-- start story section888888888888888888888888888888888888888888888888888888888888888888888888888888-->
-     				<div class="item">
-     					<div id="pic1">  &nbsp; </div>
-     					<div id="try">Drop files in the red bordered box</div>
-     				<div id="preview" style="width:100%;height:100px;border:1px solid pink;">
-     					<div id="inp"></div>
-     				</div>
+			<div id="pic1">  &nbsp; </div>
 			<div class="txt_append">
-			    <!--<p style="margin-top: 15px"><strong>1.</strong></p>-->
+			    <p style="margin-top: 15px"><strong>1.</strong></p>
 				<div id="text2"><!-- Please Type minimum 100 characters --></div> 
-				<!--<div class="txtarea form-group" style="border: 1px solid #999; border-radius: 6px;">		
+				<div class="txtarea form-group" style="border: 1px solid #999; border-radius: 6px;">		
             <section class="clearfix">
 				<div>
 				<textarea class="classy-editor_2" name="textdes2" id="textdes2">  </textarea>
 				</div>
             </section>
-			</div>-->
+			</div>
 			<div class="form-group text-center center-block">
-				
-			<!--<i class="fa fa-times" id="close1" onClick="readURLold('imgpicintro1', 'close1','vdolbl1','imglbl1' );" style="position: absolute; margin-left: 40%;margin-top: 5px;display:none;" ></i>
-			<img id="imgpicintro1" src="../assert/images/blank.png" class="imgprive img-responsive"  alt="Your Image" style="height: 300px; border-left: 1px solid #999; margin-top: -20px; border-right: 1px solid #999; border-bottom: 1px solid #999;"/>		
-              <label  class="myLabel mylabel1" id="imglbl1"> <span class="fileinput-button">
-                <span><i class="fa fa-picture-o fa-3x" style="background: rgba(128, 128, 128, 0.17);margin: 10px;"> 
-				<input type="file" name="photo1" id="photo1"  onChange="readURL(this,'display_files', 'imgpicintro1','close1', 'vdolbl1','imglbl1');" multiple value="Upload Photo" class=" "/>
-				<div id="display_files"></div>-->
-
 			<i class="fa fa-times" id="close1" onClick="readURLold('imgpicintro1', 'close1','vdolbl1','imglbl1' );" style="position: absolute; margin-left: 40%;margin-top: 5px;display:none;" ></i>
 			<img id="imgpicintro1" src="../assert/images/blank.png" class="imgprive img-responsive"  alt="Your Image" style="height: 300px; border-left: 1px solid #999; margin-top: -20px; border-right: 1px solid #999; border-bottom: 1px solid #999;"/>		
               <label  class="myLabel mylabel1" id="imglbl1"> <span class="fileinput-button">
                 <span><i class="fa fa-picture-o fa-3x" style="background: rgba(128, 128, 128, 0.17);margin: 10px;"> 
-				<input type="file" name="photo1" id="photo1"  onChange="readURLmulti(this.files);" multiple value="Upload Photo" class=" "/>
-	
-
-			</i></span></span></label>
+				<input type="file" name="photo1" id="photo1"  onChange="readURL(this, 'imgpicintro1','close1', 'vdolbl1','imglbl1');" value="Upload Photo" class=" "/></i></span></span></label>
 			<!--	 <label  class="myLabel mylabel3" id="vdolbl1" onclick="video_dv('video_url_div1')"> <span class="fileinput-button"style="margin-left:20px;">
                 <span><i class="fa fa-youtube-play fa-3x" style="background: rgba(128, 128, 128, 0.17);margin: 10px;"> 
 			</i></span></label> -->	
@@ -397,16 +267,11 @@ if(empty($boards)){
 		    </div>
 			<input type="hidden" id="countrow" name="countrow" value="1"/>
 			</div>
-			<div class="item">
 			<div style="margin-top: 10px;">
 				
 				<div style="text-align:center">
 					<span style="color:#F00" id="error"></span>
-     				</div>
-   				</div>
-
-   				
-   										<div style="text-align:right" id='submitdiv'>
+					<div style="text-align:right" id='submitdiv'>
                    
 						
 						<select class="btn btn-default" name="upsstatus" id="upsstatus" style="font-family:'FontAwesome', Arial;border: solid 1px #ccc;">
@@ -454,7 +319,18 @@ if(empty($boards)){
 			
 					</div>
 					</div>
-					<script>
+                    <!--<div style="text-align:right;display:none" id="loding" >
+                    <img src="<?= base_url()?>assert/images/uploading.gif" width="150px"/>
+                    </div>-->
+				</div>
+			</div>
+            </form>
+			<div style="text-align:center;">
+			   <a href="#" id="btn1"><i class="fa fa-plus-circle fa-3x"></i></a>
+			</div>
+		</div>
+	
+ <script>
 $(document).ready(function(){
 var i=3;
 var j=2;
@@ -520,75 +396,19 @@ function testedt(cls){
 
 function readURL(input, ld, clos, vdo,img) {
 
-
-var display_fils = document.getElementById("display_files"); 
-
+$('#'+img).css("display","none");
+$('#'+clos).css("display","");
+$('#'+vdo).css("display","none");
     if (input.files && input.files[0]) {
         var reader = new FileReader();
-        var try0 = document.getElementById("try");
-
-        for (var j = 0; j < input.files.length; j++) {
-        	try0.innerHTML=j;
-        }
 
         reader.onload = function (e) {
             $('#'+ld).attr('src', e.target.result);
         }
 
         reader.readAsDataURL(input.files[0]);
-         }
-}
-
-function readURLsingle(files) {
-var picintro0=document.getElementById("picintro0");
-  for (var i = 0; i < files.length; i++) {
-    var file = files[i];
-    try0.innerHTML=i + 1 + "found";
-    var imageType = /^image\//;
-    
-    if (!imageType.test(file.type)) {
-      continue;
     }
-    var img = document.createElement("img");
-    img.classList.add("obj");
-    img.file = file;
-    picintro0.appendChild(img);
-    var reader = new FileReader();
-    reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
-    reader.readAsDataURL(file);
-  }
 }
-
-function readURLmulti(files) {
-var try0 = document.getElementById("try");
-var preview=document.getElementById("preview");
-  for (var i = 0; i < files.length; i++) {
-    var file = files[i];
-    try0.innerHTML=i + 1 + "found";
-    var imageType = /^image\//;
-    
-    if (!imageType.test(file.type)) {
-      continue;
-    }
-    document.getElementById("countrow").value = i+2;
-    var img = document.createElement("img");
-    img.classList.add("obj");
-    img.file = file;
-    inp.appendChild(img);
-    var desc = document.createElement("textarea");
-    desc.id = "textdes"+i+2;
-    inp.appendChild(document.createElement("br"));
-    desc.name = "textdes2"+i+2;
-    inp.appendChild(desc);
-    inp.appendChild(document.createElement("br"));
-    inp.appendChild(document.createElement("br"));
-    var reader = new FileReader();
-    reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
-    reader.readAsDataURL(file);
-  }
-}
-
-
 function readURLold(ld, clos, vdo,img) {
 
 $('#'+img).css("display","");
@@ -612,31 +432,7 @@ $("#imgInp").change(function(){
 	
 });
   </script>
-                    <!--<div style="text-align:right;display:none" id="loding" >
-                    <img src="<?= base_url()?>assert/images/uploading.gif" width="150px"/>
-                    </div>-->
-				</div>
-			</div>
-            </form>
-			<!--<div style="text-align:center;">
-			   <a href="#" id="btn1"><i class="fa fa-plus-circle fa-3x"></i></a>
-			</div>-->
-		</div>
-   				</div>
-<!-- Carousel nav -->
-					<a class="carousel-control left" href="#myCarousel" data-slide="prev" style="color:black">&lsaquo;prev</a>
-					<a class="carousel-control right" href="#myCarousel" data-slide="next" style="color:black">&rsaquo;next</a>
-			</div> 		
-						
-			
-
-			
-
-	
- 
  <!-- Google Analytics Code -->
    <?php include_once("analyticstracking.php") ?>
-</div>
-</center>
 </body>
 </html>

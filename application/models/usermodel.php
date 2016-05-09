@@ -1112,17 +1112,6 @@ left join `userReview` on `userReview`.`merchantId`=`merchant`.`merchantId` WHER
         return 1;
     }
 
-    function saveUserMessage() {
-        $add = array(
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'subject' => $data['subject'],
-            'message' => $data['message']
-        );
-        $this->db->insert('contact_us', $add);
-        return 1;
-    }
-
     function AllmerchantList() {
         $this->db->where('status', '1');
         $query = $this->db->get('merchant');
@@ -2776,7 +2765,9 @@ left join `userReview` on `userReview`.`merchantId`=`merchant`.`merchantId` WHER
     function fetch_maxItem($table, $item) {
         $this->db->select_max($item);
         $result = $this->db->get($table)->result();
-        $result->{$item};
+        foreach ($result as $row):
+            return $row->{$item};
+        endforeach;
     }
 
     function all_data($table) {
@@ -3074,10 +3065,20 @@ left join `userReview` on `userReview`.`merchantId`=`merchant`.`merchantId` WHER
     }
 
     function updatecustomer($gen, $date, $loca, $empl, $mob, $bri, $usid) {
-        $query = $this->db->query("UPDATE customer SET gender='$gen',DOB='$date',location='$loca',employment='$empl',mobile='$mob',yourself='$bri' where userId='$usid'");
-
+        $query = $this->db->query("UPDATE customer SET gender='$gen',DOB='$date',location='$loca',employment='$empl',mobile='$mob',yourself='$bri' where userId=" . $usid);
+        //echo "UPDATE customer SET gender='$gen',DOB='$date',location='$loca',employment='$empl',mobile='$mob',yourself='$bri' where userId=".$usid;
         return true;
     }
+
+    function updatepassword($data1,$uid) {
+       // $query = $this->db->query("UPDATE users SET password='$password',`username`='$name' where id=" . $uid);
+        //echo "UPDATE customer SET gender='$gen',DOB='$date',location='$loca',employment='$empl',mobile='$mob',yourself='$bri' where userId=".$usid;
+        $this->db->where('id', $uid);
+$this->db->update('users', $data1);
+		return true;
+    }
+
+    /*     * ******new function********* */
 
     function getInterestsById($userId) {
         $query = $this->db->query("SELECT cat_name

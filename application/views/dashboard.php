@@ -1,51 +1,17 @@
-<html>
+<?php
+session_start();
+if (!isset($_SESSION["visits"]))
+{
+        $_SESSION["visits"] = 0;
+}
+    $_SESSION["visits"] = $_SESSION["visits"] + 1;
 
-<head>
-        <title>zersey</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+if(!isset($end))
+{
+	  /*if(!isset($post1)|| $_SESSION["visits"] <= 1)
+{
+?>
 
-        <!-- jQuery library -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-
-        <!-- Latest compiled JavaScript -->
-        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-        <!--<style></style>-->
-        <link href="style1.css" rel="stylesheet" type="text/css" />
-        <!--<style type="text/css">
-            
-        </style>-->
-		 <!--<link href="style2.css" rel="stylesheet" type="text/css" />-->
-
-    
-	<script>
-	function video_dv()
-
-	{
-		$("#video_url_div").toggle();
-	}
-
-	</script>
-<!--
-	<script type = "text/javascript">
-	$(function () {
-            $("#dialog").dialog({
-                modal: true,
-                autoOpen: true,
-                title: "Please spare us a few Minutes",
-                width : 800,
-                height : 800
-            });
-        });
-</script>
-	
-	-->
-</head>
-
-	
-<body> 	
-	
 	<div id="myModal1" class="modal fade" role="dialog" data-backdrop="static"  >
             <div class="modal-dialog1">
                 <!-- Modal content-->
@@ -82,11 +48,15 @@
                                                     <div class="form-group" style="border: 1px solid black; height:415px; overflow: auto;">
 													<!--Run a loop to generate category boxes with this code inside it to create the box-->
                                                        <?php 
-				$result=$this->datamodel->dashboadcat();
+				$result=$this->datamodel->dashboadcats();
 				if($result){ foreach($result as $rts){
 					
 					$result1=$this->datamodel->catnamebyname($rts['maincat']);
 					$res=$result1[0]['category'];
+					if($res == "")
+					{
+						continue;
+					}
 				$uid=$this->session->userdata['user_id'];
 								$pro=$this->datamodel->selectfollow($res,$uid);
 													$folid=$pro[0]['fcid'];
@@ -155,7 +125,7 @@
                                                     <div class="form-group" style="border: 1px solid black; height:415px; overflow: auto;">
 													<!--Run a loop to generate category boxes with this code inside it to create the box-->
                                                         <?php 
-				$resultuser=$this->datamodel->topuser();
+				$resultuser=$this->datamodel->topusers();
 				if($resultuser){ foreach($resultuser as $rtsu){
 					
 					$uid=$rtsu['userid'];
@@ -315,8 +285,8 @@
                 </div>
             </div>
         </div>
-        <script src="js/jquery.bootstrap.wizard.js" type="text/javascript"></script>
-        <script src="js/wizard.js"></script>
+        <!--<script src="js/jquery.bootstrap.wizard.js" type="text/javascript"></script>-->
+        <!--<script src="js/wizard.js"></script>-->
         <!--<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>-->
         <script type="text/javascript">
             function customCheckbox(checkboxName) {
@@ -390,11 +360,170 @@
 		 $(document).ready(function () {
 		   $("#myModal1").modal('show');
 		 });
-		</script>
-	
+			</script>
+
+			<?php } ?>
+<script>
+function video_dv()
+
+	{
+		$("#video_url_div").toggle();
+	}
+
+</script>
+
+<script src="assert/js/unveil.js"></script>	
+<script>
+/*$(document).ready(function() {
+  $(".imgholder img").unveil();
+  $(".imgholder img").unveil(200);
+});
+</script>
+<?php }*/ 
+?>
+
+        <?php  if(!isset($post)){ ?>
+<script>
+
+last_post_id = <?php $x = end($post1); echo($x ?  $x['publish_id'] : 0) ?>;</script>
+
+<?php }?>
+
+<script src="<?= base_url();?>assert/js/jquery.lazyload.js" type="text/javascript"></script>
+
+
+
+<?php
+if(!isset($post1))
+{
+?>
+
+
+<script>
+  //$(".imgholder").lazyload();
+  /*$(".imgholder").lazyload({
+    threshold : 200
+});*/
+    
+    var page_load_time;
+    var feeds_ended = false;
+    $(document).ready(function(){
+    $(this).scrollTop(0);
+    var temp = new Date();
+    page_load_time = temp.getTime()/1000;
+    setInterval(function(){
+            $.ajax({
+                type: "GET",
+                data: "data="+ page_load_time,
+                url:  "<?= base_url()?>users/feeds_new",
+                success: function(msg){
+                    if(msg!='0')$("#new_posts_link").html(msg + " new posts");
+                    else{$("#new_posts_link").html("");}
+                }                
+            });
+    }, 10000);
+});
+
+
+var last_post_id = 0;
+var loadingposts = false;
+$(document).ready(function(){
+//alert("hi");
+
+last_post_id = <?php $x = end($post); echo($x['publish_id']);?>;
+
+//var j=i;
+/*$(window).scroll(function() {
+    
+//alreadyloading = false;
+//nextpage = 2;
+ 
+/*$(window).scroll(function() {
+    if ($(document).height() == ($(window).height() + $(window).scrollTop())) {
+        if (alreadyloading == false) {
+            var url ="<?= base_url()?>users/feeds" ;
+            alreadyloading = true;
+
+            $("#dashboard_image_div").html();
+            $.post(url, function(data) {
+               // $("#dashboard_image_div").hide();
+                alert(data);
+                $('#container').html(data);
+                
+                alreadyloading = false;
+               
+            });
+        }
+    }
+});
+});*/
+
+
+
+
+    
+
+            $(window).scroll(function() {
+
+
+        if($(window).scrollTop() == $(document).height() - $(window).height()) {
+        //alert("hello");
+        //alert(last_post_id);
+        
+                if(feeds_ended)return;
+                if(loadingposts==true)return;   
+                loadingposts = true;
+            
+                
+            //alert(25 * i);
+        
+               $("#dashboard_image_div").append('<img src="<?= base_url()?>assert/images/loading_spinner.gif"  id="loading">');
+               
+                    $.ajax({
+                type: "GET",
+                data: "data="+ last_post_id,
+                url:  "<?= base_url()?>users/feeds",
+                success: function(msg){
+                if(msg==null||msg.trim()==""){feeds_ended = true;}
+                //alert(msg);      
+                //alert(last_post_id);   
+                $("#loading").remove();
+
+               $("#dashboard_image_div").append(msg);
+               //$(".grid").hide();
+               loadingposts = false;
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                    loadingposts = false;
+                }
+                
+            });
+        
+
+           // ajax call get data from server and append to the div
+    }
+});
+        });
+  /*$(window).scroll(function(){
+    $('img[realsrc]').each(function(i){
+      var t = $(this);
+      if(t.position().top > ($(window).scrollTop()+$(window).height()){
+        t.attr('src', t.attr('realsrc')); // trigger the image load
+        t.removeAttr('realsrc'); // so we only process this image once
+      }
+    });
+  });
+
+});*/
+
+
+</script>
+<?php
+}
+  ?>
+
 	<div class="row">
 		<div class="col-lg-12 col-md-12 col-sm-12">
-				<!----------left part------------------>
 			<div class="col-lg-2 col-md-2 col-sm-2 fixed" id="left_div" style="padding:0px;">
 				<!--<div class="col-lg-12 col-md-12 col-sm-12" style="border:1px solid red;padding:5px;margin-top:5px;">
 					<div class="col-lg-6 col-md-6 col-sm-6" style="padding:0px;">
@@ -404,9 +533,12 @@
 						<button type="button" class="btn btn-danger">My Post</button>
 					</div>
 				</div>-->
+
+
 				<div class="col-lg-12 col-md-12 col-sm-12 follow_div" style="height:495px;">
 					<div class="panel-heading" style="background: #555;color: #fff;"><h3 class="panel-title">Follow Category</h3></div>
                      <?php 
+
 				$result=$this->datamodel->dashboadcat();
 				if($result){ foreach($result as $rts){
 					
@@ -420,7 +552,7 @@
 
 				
 					
-                  <form method="post" action="<?=base_url()?>users/categoryfollow">  		
+                  <form method="post" action="<?=base_url()?>users/categoryfollowByName">  		
 			               <input type="hidden" id="uid" name="uid" value="$uid"/>
                <input type="hidden" id="cid" name="cid" value="<?= $result1[0]['category']?>"/>
 
@@ -464,7 +596,7 @@ else {
 			<!-----middle part-------->
 			<div class="col-lg-8 col-md-8 col-sm-8 up_center_div" style="margin-left: 16.66666667%;">
 				
-				<div class="sharebox col-lg-12 col-md-12 col-sm-12">
+				<div class="sharebox col-lg-12 col-md-12 col-sm-12" style="display:none;">
 					
 					<div class="col-lg-12 col-md-12 col-sm-12">
 						<div style="display:inline-block;">
@@ -575,14 +707,14 @@ else {
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-12 col-md-12 col-sm-12" style="padding:5px;margin-top:15px; background:#FFF; border-radius:5px" id="dashboard_image_div">
+				<div class="col-lg-12 col-md-12 col-sm-12" style="padding:5px;margin-top:8%; margin-left:%; background:#FFF; border-radius:5px; width: 850px;" id="dashboard_image_div">
 					<div id="container">
 						<?php if(isset($post)){
 							foreach($post as $pt){
 							$pte= $pt['editorial'];	
 							?>
                            
-						<div class="grid">
+						<div class="grid" style="height: 350px">
                         <?php 
 						$hed=str_replace(" ","-",$pt['head']);
 						$hed= preg_replace('/[^A-Za-z0-9\-]/', '', $hed);
@@ -595,27 +727,86 @@ else {
 						 {
 							 ?>
 			  <a href="<?= base_url()?>postvieweditorial/<?= $pt['id']?>" style="text-decoration:none">
+              <div class="imgholder">
+                                <?php
+                                $pic=$pt['image'];
+                                 if(file_exists("./m.zersey/assets/zerseynme/$pic")){?>
+   <img src="http://m.zersey.com/assets/zerseynme/<?= $pt['image']?>" realsrc="<?= base_url();?>assets/zerseynme/<?= $pt['image']?>" width="200px" height="200px" />
+                              
+                                <?php } else {?>
+ <img src="http://zersey.com/assets/zerseynme/<?= $pt['image']?>" realsrc="http://zersey.com/assets/zerseynme/<?= $pt['image']?>" width="200px" height="200px" />
+                                 <?php }?>
+                                <p class="card-tag"><?= $pt['maincat']?></p>
+                            </div>
+                            
                          <?php 
 
 						 }
-						 else
+						 else if($pte == 0)
 						 {
 						 ?>
                         <a href="<?= base_url()?>postview/<?= $fhed?>/<?= $pt['id']?>" style="text-decoration:none">
-                                                 <?php 
-						 }
-						 ?>
-							<div class="imgholder">
-								<?php
-								$pic=$pt['image'];
-								 if(file_exists("./assets/zerseynme/$pic")){?>
-                                <img src="<?= base_url();?>assets/zerseynme/<?= $pt['image']?>" />
+                        <div class="imgholder">
+                                <?php
+                                $pic=$pt['image'];
+                                 if(file_exists("./m.zersey/assets/zerseynme/$pic")){?>
+   <img src="http://m.zersey.com/assets/zerseynme/<?= $pt['image']?>" realsrc="<?= base_url();?>assets/zerseynme/<?= $pt['image']?>" width="200px" height="200px" />
                               
                                 <?php } else {?>
-                                   <img src="http://zersey.com/assets/zerseynme/<?= $pt['image']?>" />
+ <img src="http://zersey.com/assets/zerseynme/<?= $pt['image']?>" realsrc="http://zersey.com/assets/zerseynme/<?= $pt['image']?>" width="200px" height="200px" />
                                  <?php }?>
                                 <p class="card-tag"><?= $pt['maincat']?></p>
-							</div>
+                            </div>
+                            
+                                                 <?php 
+						 }
+
+                         else if($pte == 2)
+                         {
+                         ?>
+                        <a href="<?= base_url()?>postviewvideo/<?= $fhed?>/<?= $pt['id']?>" style="text-decoration:none">
+                        <div class="imgholder">
+
+                              <p class="card-tag"><?= $pt['maincat']?></p> 
+                                <?php
+                                $pic=$pt['image'];
+                                $url=explode(".",$pic);
+                                //print_r($url[1]);
+                                if($url[1]=="youtube")
+                                {
+                                $video1=str_replace("watch/?v=","embed/", $pic,$count1);
+                                 $video2=str_replace("watch?v=","embed/", $pic);
+                                 if($count1 > 0)
+                                 {
+                               ?>
+
+                               <iframe src="<?php echo $video1; ?>" width="265px" height="200px" frameborder="0" allowfullscreen>
+                               </iframe> 
+                               <?php
+                           }
+                           else
+                           {
+                            ?>
+                            <iframe src="<?php echo $video2; ?>" width="265px" height="200px" frameborder="0" allowfullscreen>
+                               </iframe> 
+                               
+                            <?php
+                           }
+                       }
+                       else 
+                       {
+                            $video1=$pic."/embed/simple";
+                            ?>
+                            <iframe src="<?php echo $video1; ?>" width="265px" height="200px" frameborder="0" allowfullscreen>
+                               </iframe>
+                            <?php
+                       }
+                               ?>
+                              </div>
+                                                 <?php 
+                         }
+
+						 ?>
 							<div class="content">
 								<div class="like-comment-date">
 									<ul class="meta">
@@ -667,12 +858,101 @@ if($nextpg!='' || $nextpg!=NULL)
 {
 $default=$nextpg;
 }?>
-<form action="<?= base_url()?>users/feeds/" method="GET">
+<!--<form action="<?= base_url()?>users/feeds/" method="GET">
 				        <input type="hidden" value="<?php echo $default; ?>" id="nextpg"name="nextpg" >
 
-            <center>    <input type="submit"  id="showmor" class="show_more btn btn-danger" title="Load more posts" value="Show more">
+            <center>   <!-- <input type="submit"  id="showmor" class="show_more btn btn-danger" title="Load more posts" value="Show more">
         <span class="loding" style="display: none;"><span class="loding_txt">...Loading...</span></span> </center>
-		</form>
+		</form>-->
+
+						<div class="col-lg-12 col-md-12 col-sm-12" style="padding:5px;margin-top:-23%; margin-left:-31%; background:#FFF; border-radius:5px; width: 850px;" id="dashboard_image_div">
+					<div id="container">
+						<?php if(isset($post1)){
+							foreach($post1 as $pt){
+							$pte= $pt['editorial'];	
+							?>
+                           
+						<div class="grid" style="height: 350px">
+                        <?php 
+						$hed=str_replace(" ","-",$pt['head']);
+						$hed= preg_replace('/[^A-Za-z0-9\-]/', '', $hed);
+						$fhed=substr($hed,0,50);
+						if($fhed =="")
+						$fhed=$this->session->userdata['username'];
+						?>
+                         <?php 
+						 if($pte==1)
+						 {
+							 ?>
+			  <a href="<?= base_url()?>postvieweditorial/<?= $pt['id']?>" style="text-decoration:none">
+                         <?php 
+
+						 }
+						 else
+						 {
+						 ?>
+                        <a href="<?= base_url()?>postview/<?= $fhed?>/<?= $pt['id']?>" style="text-decoration:none">
+                                                 <?php 
+						 }
+						 ?>
+							<div class="imgholder">
+								<?php
+								$pic=$pt['image'];
+								 if(file_exists("./m.zersey/assets/zerseynme/$pic")){?>
+   <img src="http://m.zersey.com/assets/zerseynme/<?= $pt['image']?>" realsrc="<?= base_url();?>assets/zerseynme/<?= $pt['image']?>" width="200px" height="200px" />
+                              
+                                <?php } else {?>
+ <img src="http://zersey.com/assets/zerseynme/<?= $pt['image']?>" realsrc="http://zersey.com/assets/zerseynme/<?= $pt['image']?>" width="200px" height="200px" />
+                                 <?php }?>
+                                <p class="card-tag"><?= $pt['maincat']?></p>
+							</div>
+							<div class="content">
+								<div class="like-comment-date">
+									<ul class="meta">
+									<li style="padding:0px 5px !important"><i class="icon-calendar"></i><?php // $to_time = strtotime($cm->datetm);
+$to_time = strtotime(str_replace('/', '-', $pt['createdOn']));
+//echo strtotime("22-03-2015 20:08:16");
+$from_time = strtotime(date("d-m-Y H:i:s"));
+$min=round(abs($to_time - $from_time) / 60);
+if($min>59){
+	$minx= round($min/60);
+if($minx>23){
+$minz=round($minx/24);
+if($minz<30){
+echo ($minz. " Day");
+}
+else{
+	
+	$a= explode(" ", $pt['createdOn']);
+	echo $a[0];
+	}
+}
+else{	echo $minx." Hr";}
+	}
+else{ echo $min." Min.";}
+?></li>
+									</ul>
+									<h5 style="text-align:justify"><?= $pt['head']?></h5>
+								</div>
+							</div>
+                            <?php  $photox=$this->usermodel->where_data('customer',array('userId'=>$pt['userid']));
+							//echo $pt['id']."<br>";
+							$unm=$this->datamodel->getusernamebyid($pt['userid']);
+							 echo $unm;
+
+							 ?>
+							<div class=" metabtm meta">
+                            <a href="<?= base_url()?>userprofile/<?= $unm->username?>">
+                          <img src="<?php if(isset($photox[0]->photo)){ echo base_url();?>assets/images/merchant/<?php echo $photox[0]->photo;} 
+					else { echo base_url().'assert/images/User_Profile_Pic_Icon.png'; }?>" style="width:30px;border-radius: 10px;display: inline-block;"></a>
+                    <p style="display:inline-block; padding:5px"><a href="<?= base_url()?>userprofile/<?= $unm->username?>"><?php if($pt['userid']!='0') echo $photox[0]->fullname; else echo 'Admin'?></a></p></div>
+						</a>
+                        </div>
+                        <?php }}?>
+	 
+					</div>
+                  	
+				</div>
 			</div>
 
 
@@ -827,32 +1107,8 @@ else {
 			 });
     </script>
 
- <script> 
-			$("#update_popup").click(function(){
-				 $("#newpopup").modal('show');
-			 });
-			 
-			 $("#visiual_post").click(function(){
-				 $("#create_discussion").modal('show');
-			 });
-			 
-			  $("#poll_post").click(function(){
-				 $("#newpopup").modal('show');
-			 });
-			 
-			
-			  $("#post_quiz").click(function(){
-				 $("#newpopup").modal('show');
-			 });
-			 
-			
-			   $("#question_post").click(function(){
-				 $("#newpopup").modal('show');
-			 });
-			 
-			 
-	</script> 
-	
+ 
+
 	
     <script src="assert/js/jquery.event.move.js"></script>
     <script src="assert/js/plugin/jquery.jscroll.js"></script>
@@ -872,6 +1128,10 @@ else {
 	
 });
   </script>
-	
+	 <!-- Google Analytics Code -->
+   <?php include_once("analyticstracking.php") ?>
 </body>
 </html> 
+<?php
+}
+?>

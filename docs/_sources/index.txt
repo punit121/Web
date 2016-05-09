@@ -1,0 +1,55 @@
+.. Zersey Documentation master file.
+
+#################################
+Welcome to Zersey's Documentation
+#################################
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Table of Contents
+   :name: contentsMain 
+
+.. contents::
+   :local:
+   :depth: 2
+    
+********************
+Controllers and Uses
+********************
+  
+.. toctree::
+      :glob:
+      :titlesonly:
+        
+      controllers/index
+      
+********************
+Everything on Models
+********************
+
+.. toctree::
+      :glob:
+      :titlesonly:
+      
+      models/index
+      
+******************
+Working With Views
+******************
+
+.. toctree::
+      :glob:
+      :titlesonly:
+            
+      views/index
+            
+**************
+Library Usages
+**************
+
+.. toctree::
+      :glob:
+      :titlesonly:
+            
+      libraries/index
+

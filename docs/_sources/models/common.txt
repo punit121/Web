@@ -1,0 +1,12 @@
+.. Function in common model are listed here
+
+################
+Common Functions
+################
+
+.. contents::
+  :local:
+
+.. raw:: html
+
+  <div class="custom-index container"></div>

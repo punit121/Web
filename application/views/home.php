@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+ <script>
+  //alert(window.innerWidth);
+var isMobile = false;
+if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Opera Mobile|Kindle|Windows Phone|PSP|AvantGo|Atomic Web Browser|Blazer|Chrome Mobile|Dolphin|Dolfin|Doris|GO Browser|Jasmine|MicroB|Mobile Firefox|Mobile Safari|Mobile Silk|Motorola Internet Browser|NetFront|NineSky|Nokia Web Browser|Obigo|Openwave Mobile Browser|Palm Pre web browser|Polaris|PS Vita browser|Puffin|QQbrowser|SEMC Browser|Skyfire|Tear|TeaShark|UC Browser|uZard Web|wOSBrowser|Yandex.Browser mobile/i.test(navigator.userAgent))
+{
+	//alert("mobile");
+ isMobile = true;
+ location.replace("http://m.zersey.com");
+ }
+else
+{
+	//alert("web");
+  //location.replace("http://zersey.com");
+}
+</script>
+
 
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
@@ -9,7 +25,7 @@
         <meta name="description" content="" />
         <meta name="keywords" content="" />
         <meta name="author" content="" />
-        <link rel="icon" href="<?= base_url(); ?>asset/images/logo.jpg" type="image/ico">
+        <link rel="icon" href="<?= base_url()?>assets/images/final_logo.jpg" type="image/ico">
 		
 	 <!-- bootstrap css link start -->
        <link href="<?= base_url();?>assert/css/bootstrap.min.css" rel="stylesheet" type="text/css"> <!-- bootstrap css link close -->
@@ -44,18 +60,35 @@
 		<link href="<?= base_url();?>assert/css/animate.css" rel="stylesheet" />
 		<link href="<?= base_url();?>assert/css/styles.css" rel="stylesheet">
 		<link href="<?= base_url();?>assert/css/color/default.css" rel="stylesheet">
-		
+		<style>
+			.image {
+    position:relative;
+}
+.image img {
+    width:100%;
+    vertical-align:top;
+}
+.image:after {
+    content:'\A';
+    position:absolute;
+    width:100%; height:100%;
+    top:0; left:0;
+    background:rgba(0,0,0,0.5);
+    opacity:1;
+}</style>
      
     </head>
     <body>
          <p class="codrops-demos" style="position: absolute;z-index: 999;right:0">
          <a class="current-demo" data-toggle="modal" data-target="#myModal" href="#" style="border: none;"><button class="btn btn-lg btn-primary btn-block" type="submit">Login</button></a>
 	</p>
+	<section class="ss-window" id="main_div"></section>
 <section>
 <ul id="demo1">
 	<li style="padding:0px;margin:0px;">
+	<div class="image">
 	<img src ="<?= base_url();?>assert/images/Artist.jpg" />
-	<div style="background: rgba(0,0,0,0.5)">
+	</div>
 	 <div class="slide-desc">
 			<h2 class="zersey_text" >Zersey - Your Life's Storyboard</h2>
 			<p class="zersey_text1">Bring thoughts and ideas to life with amazing stories & visuals</p>
@@ -68,11 +101,12 @@
 		<div class="slide-desc2">
 			    <h4>I AM @ARTIST<h4>
 		</div>
-		</div>
 	</li>
 	<li style="padding:0px;margin:0px;">
+	<div class="image">
 	<img src ="<?= base_url();?>assert/images/Traveller.jpg" />
-	    <div class="slide-desc">
+	 </div>
+		<div class="slide-desc">
 			<h2 class="zersey_text">Zersey - Your Life's Storyboard</h2>
 			<p class="zersey_text1">Bring thoughts and ideas to life with amazing stories & visuals</p>
 	    </div>
@@ -87,7 +121,9 @@
 		</div>
 	</li>
 	<li style="padding:0px;margin:0px;">
+	<div class="image">
 	    <img src ="<?= base_url();?>assert/images/Style-Icon.jpg" />
+	</div>
 	    <div class="slide-desc">
 			<h2 class="zersey_text">Zersey - Your Life's Storyboard</h2>
 			<p class="zersey_text1">Bring thoughts and ideas to life with amazing stories & visuals</p>
@@ -103,7 +139,9 @@
 	  
 	</li>
 	<li style="padding:0px;margin:0px;">
+	<div class="image">
 	    <img src ="<?= base_url();?>assert/images/Photographer.jpg" />
+	</div>
 		<div class="slide-desc">
 				<h2 class="zersey_text">Zersey - Your Life's Storyboard</h2>
 				<p class="zersey_text1">Bring thoughts and ideas to life with amazing stories & visuals</p>
@@ -118,7 +156,9 @@
 		</div>
 	</li>
 	<li style="padding:0px;margin:0px;">
+	<div class="image">
 	    <img src ="<?= base_url();?>assert/images/Foodie.jpg" />
+	</div>
 	    <div class="slide-desc">
 			<h2 class="zersey_text">Zersey - Your Life's Storyboard</h2>
 			<p class="zersey_text1">Bring thoughts and ideas to life with amazing stories & visuals</p>
@@ -133,7 +173,9 @@
 		</div>
 	</li>
 	<li style="padding:0px;margin:0px;">
+	<div class="image">
 	<img src ="<?= base_url();?>assert/images/banner.jpg" />
+	</div>
 	    <div class="slide-desc">
 			<h2 class="zersey_text">Zersey - Your Life's Storyboard</h2>
 			<p class="zersey_text1">Bring thoughts and ideas to life with amazing stories & visuals</p>
@@ -152,6 +194,8 @@
 </section>
         <!-- slider code close -->
         
+
+     
         <!-- one page scroll code start -->
       
           <section class="ss-window" id="link1"></section>
@@ -164,7 +208,7 @@
 					<div class="wow flipInY" data-wow-offset="0" data-wow-delay="0.4s">
 					<div class="section-heading text-center">
 					<h2 class="h-bold">About us</h2>
-					<div class="divider-header"></div>
+					<div class="divider-header" style="margin-top: -30px;"></div>
 					</div>
 					</div>
 				</div>
@@ -234,7 +278,10 @@
 		</div>
 		</div>
 		
-		        
+		        <div style="position: fixed;z-index: 999;bottom: 50px;width: ;">
+				
+					<a href="#main_div"> <img src="<?= base_url();?>assert/images/arrow-up.png" alt="Sixth slide" style="width:5%;float:right"></a>
+				</div> 
 	</section>
 	    <section id="works" class="home-section color-dark text-center bg-white">
 			<div class="container marginbot-50">
@@ -276,6 +323,7 @@
 				</div>
 		    </div>
         </section>
+			<section class="ss-window" id="contact"></section>
 	  <section id="contact" class="
 	  -section nopadd-bot color-dark bg-gray text-center">
 		<div class="container marginbot-50">
@@ -284,8 +332,7 @@
 					<div class="wow flipInY" data-wow-offset="0" data-wow-delay="0.4s">
 					<div class="section-heading text-center">
 					<h2 class="h-bold">Contact Us</h2>
-					<div class="divider-header"></div>
-					<p>Send Us A Message</p>
+					<div class="divider-header" style="margin-top: -30px"></div>
 					</div>
 					</div>
 				</div>
@@ -297,26 +344,26 @@
 
 			<div class="row marginbot-80">
 				<div class="col-md-8 col-md-offset-2">
-						<form id="contact-form" onsubmit="return false" class="wow bounceInUp" data-wow-offset="10" data-wow-delay="0.2s">
+						<form method='post' id="contact-form" class="wow bounceInUp" data-wow-offset="10" data-wow-delay="0.2s" action="<?php echo base_url()."index.php/users/contactus"?>">
 						<div class="row marginbot-20">
 							<div class="col-md-6 xs-marginbot-20">
-								<input type="text" class="form-control input-lg" id="name" placeholder="Enter name" required />
+								<input type="text" class="form-control input-lg" id="name" placeholder="Enter name" name="name" required />
 							</div>
 							<div class="col-md-6">
-								<input type="email" class="form-control input-lg" id="email" placeholder="Enter email" required />
+								<input type="email" class="form-control input-lg" id="email" placeholder="Enter email" name="email" required />
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-12">
 								<div class="form-group">
-										<input type="text" class="form-control input-lg" id="subject" placeholder="Subject" required />
+										<input type="text" class="form-control input-lg" id="subject" placeholder="Subject" name="subject" required />
 								</div>
 								<div class="form-group">
 									<textarea name="message" id="message" class="form-control" rows="4" cols="25" required
-										placeholder="Message"></textarea>
+										placeholder="Message" name="mass"></textarea>
 								</div>						
-								<button type="submit" class="btn btn-skin btn-lg btn-block" id="btnContactUs">
-									Send Message</button>
+								<button type="submit" class="btn btn-skin btn-lg btn-block" id="btnContactUs" name="submit">Send Message</button>
+									
 							</div>
 						</div>
 						</form>
@@ -393,14 +440,52 @@
 										</form>
 									</div>
                                 </section>
-                                <section class="signup-section" >
+                                <section class="signup-section">
 								    <div>
 										<ul class="form-header" style="color: #000;">
 											<li><label for="login"><i class="fa fa-lock"></i> LOGIN<label for="login"></li>
 											<li><label for="signup"><i class="fa fa-credit-card"></i> REGISTER</label></li>
 										</ul>
                                     </div>
-                                       <form id="registrationform" method="post" action="<?= base_url();?>auth/signUp">
+                                     <form id="registrationform" method="post" action="<?= base_url();?>auth/signUp">
+                                    <div class="login" style="padding-bottom: 0px;padding-top: 10px;padding-left: 20px;padding-right: 20px;">    
+                                     	       <!-- <div style="border:solid 1px #ccc;width:80%;margin:auto;background:#fff;">
+                                                <div style="display:inline-block;margin-top:11px;font-size:15px;margin-left: 10px;"> Zersey.com/</div><input type="name" required class="input" name="username" placeholder="User Name" style="width:97px;display: inline-block;border: none;">
+                                            </div>    
+                                    </div>  -->
+                                    <h1 style="text-align: center;margin-top: 0px;">Sign up with</h1>
+                                    <div style="text-align:center">
+												<a href="<?= base_url();?>hauth/login/Facebook"title="Facebook"  style="cursor:pointer" >
+
+											<img src="<?= base_url();?>assert/images/facebook.png" title="" alt="" style="width: 80px;" />
+										</a>
+								<a href="<?= base_url();?>hauth/login/Google" title="Google"  style="cursor:pointer" >
+										<img src="<?= base_url();?>assert/images/google.png" title="" alt="" style="width:80px;" />
+										</a>
+                                    </div>
+                                    <p style="text-align: center;margin-top: 10px;">Or via email</p>
+                                        <div class="login" style="padding-top: 10px;padding-bottom: 10px;">    
+                                            <ul class="ul-list">
+											     <li><input type="name" required name="firstName" id="firstName" class="input" placeholder="First Name"/><span class="icon"><i class="fa fa-user"></i></span></li>
+                                                <li><input type="name" required name="lastName" id="lastName" class="input" placeholder="Last Name"/><span class="icon"><i class="fa fa-user"></i></span></li>
+												  <li><input type="name" required name="UserName" id="UserName" class="input" placeholder="User Name"/><span class="icon"><i class="fa fa-user"></i></span></li>
+												 
+											
+                                                <li><input type="email" required class="input" name="email" id="email" placeholder="Your Email"/><span class="icon"><i class="fa fa-user"></i></span></li>
+                                                <li><input type="password" required name="password" id="password" class="input" placeholder="Password"/><span class="icon"><i class="fa fa-lock"></i></span></li>
+                                                <li><input type="text" required class="input" name="phno" id="phno" placeholder="ContactNo"/><span class="icon"><i class="fa fa-user"></i></span></li>
+												<li>
+					<button type="submit" class="btn btn-skin btn-lg btn-block" name="customerSubmit" id="customerSubmit" style="width: 245px;">SIGN UP</button>
+												</li>
+                                                <!--<li>
+                                                    <span class="remember">
+                                                        <a href="#">Forget Password</a>
+                                                    </span>
+                                                </li>-->
+                                            </ul>
+                                        </div>
+                                    </form>
+                                       <!--<form id="registrationform" method="post" action="<?= base_url();?>auth/signUp">
                                     <div class="login" style="padding-bottom: 0px;padding-top: 10px;padding-left: 20px;padding-right: 20px;">    
                                             <div style="border:solid 1px #ccc;width:80%;margin:auto;background:#fff;">
                                                 <div style="display:inline-block;margin-top:11px;font-size:15px;margin-left: 10px;"> Zersey.com/</div><input type="name" required class="input" name="username" placeholder="User Name" style="width:97px;display: inline-block;border: none;">
@@ -419,22 +504,23 @@
                                     <p style="text-align: center;margin-top: 10px;">Or via email</p>
                                         <div class="login" style="padding-top: 10px;padding-bottom: 10px;">    
                                             <ul class="ul-list">
-											     <li><input type="name" required name="firstName" id="firstName" class="input" placeholder="First Name"/><span class="icon"><i class="fa fa-user"></i></span></li>
+                                                 <li><input type="name" required name="firstName" id="firstName" class="input" placeholder="First Name"/><span class="icon"><i class="fa fa-user"></i></span></li>
                                                 <li><input type="name" required name="lastName" id="lastName" class="input" placeholder="Last Name"/><span class="icon"><i class="fa fa-user"></i></span></li>
                                                 <li><input type="email" required class="input" name="email" id="email" placeholder="Your Email"/><span class="icon"><i class="fa fa-user"></i></span></li>
+                                                <?php echo form_error('email');?>
                                                 <li><input type="password" required name="password" id="password" class="input" placeholder="Password"/><span class="icon"><i class="fa fa-lock"></i></span></li>
                                                 <li><input type="text" required class="input" name="phno" id="phno" placeholder="ContactNo"/><span class="icon"><i class="fa fa-user"></i></span></li>
-												<li>
+                                                <li>
 					<button type="submit" class="btn btn-skin btn-lg btn-block" name="customerSubmit" id="customerSubmit" style="width: 245px;">SIGN UP</button>
 												</li>
                                                 <!--<li>
                                                     <span class="remember">
                                                         <a href="#">Forget Password</a>
                                                     </span>
-                                                </li>-->
+                                                </li>
                                             </ul>
                                         </div>
-                                    </form>
+                                    </form>-->
                                 </section>
                             </div>
 
@@ -460,23 +546,24 @@
 
                             <div class="section-out">
                                 <section class="login-section">
-								    
+								    <form action="<?= base_url();?>auth/forgot_password" method="POST">
                                     <h5 style="text-align: center;margin-top: 25px;">FORGOT PASSWORD<button style="margin-top: -29px;" type="button" class="close" data-dismiss="modal">×</button></h5>
                                     
                                  
                                     <div class="login">
-                                        <form action="">
+                                        
                                             <ul class="ul-list">
-                                                <li><input type="email" required class="input" placeholder="Your Email"/><span class="icon"><i class="fa fa-user"></i></span></li>
+                                                <li><input type="email" required class="input" name="email" id="email" placeholder="Your Email"/><span class="icon"><i class="fa fa-user"></i></span></li>
                                                
                                             </ul>
-                                        </form>
+                                        
                                     </div>
 									<p style="border-top: solid 2px;border-bottom: solid 2px;text-align: center;" >Please enter the email address you signed up with and we'll send you a password reset link.</p>
 									<li style="padding-bottom: 20px;">
 												    <button type="submit" class="btn btn-skin btn-lg btn-block" id="btnContactUs" style="width: 160px;margin-left:100px;">
 									Reset password</button>
 												</li>
+												</form>
                                 </section>
 
                                 <section class="signup-section">
@@ -497,7 +584,25 @@
             </div>
         </div>
 		
-		
+
+
+
+        <div class="modal fade" id="myModalOTP" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 352px; margin-left: 25%; background: #fefefe;">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body text-center">
+        <h3>Please Enter The OTP</h3>
+<div class="form-group">
+    <input type="password" class="form-control" placeholder="Enter OTP"/>
+</div>
+<h5>Did not receive OTP?</h5>
+<input type="" class="btn btn-danger btn-block" name="" value="Resend OTP" style="width: 160px; margin-left: 80px"/>
+<input type="submit" class="btn btn-success btn-block" name="submit" value="Confirm OTP" style="width: 160px; margin-left: 80px"/>
+      </div>
+    </div>
+  </div>
+</div>
 		    <div class="modal fade" id="testwqs" role="dialog">
             <div class="modal-dialog" style="width: 352px !important;">
                 <!-- Modal content-->
@@ -655,7 +760,6 @@
 		
 		
         <script src="<?= base_url();?>assert/js/jquery.min.js"></script>
-        <script src="<?= base_url();?>assets/js/functions.js"></script>
         <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 		<script src="<?= base_url();?>assert/js/jquery.sticky.js"></script>	
        <script src="<?= base_url();?>assert/js/jquery.flexslider-min.js"></script>
@@ -694,11 +798,11 @@
         <!-- wizard popup code close -->
 	
    <script>
-   /*$(window).scroll(function() {
-   if($(window).scrollTop() + $(window).height() == $(document).height()) {
+   $(window).scroll(function() {
+   if($(window).scrollTop() + $(window).height() == $(document).height()+50) {
            $("html, body").animate({ scrollTop: 0 }, 2000);
    }
-});*/
+});
 					
 		</script>
     <!-- Core JavaScript Files -->
@@ -768,12 +872,14 @@
     <script> 
 			$("#btnContactUs").click(function(){
 				 $("#myModal").modal('hide');
+				 $("#testwqs").modal('show');
 				
 			 });
+			
 	</script>   	
    <!-- wizard popup code close -->
-   
-   <!--Google Analytics code-->
+
+   <!-- Google Analytics Code -->
    <?php include_once("analyticstracking.php") ?>
     </body>
 </htm>

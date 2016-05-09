@@ -5,8 +5,9 @@
  * An open source application development framework for PHP 5.1.6 or newer
  *
  * @package		CodeIgniter
- * @author		Esen Sagynov
- * @copyright	Copyright (c) 2008 - 2011, EllisLab, Inc.
+ * @author		EllisLab Dev Team
+ * @copyright		Copyright (c) 2008 - 2014, EllisLab, Inc.
+ * @copyright		Copyright (c) 2014 - 2015, British Columbia Institute of Technology (http://bcit.ca/)
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 2.0.2
@@ -199,5 +200,4 @@ class CI_DB_cubrid_result extends CI_DB_result {
 
 
 /* End of file cubrid_result.php */
-/* Location: ./system/database/drivers/cubrid/cubrid_result.php */ 
-
+/* Location: ./system/database/drivers/cubrid/cubrid_result.php */

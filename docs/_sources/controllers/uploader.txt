@@ -1,0 +1,12 @@
+.. Functions in uploader Class in Controller will be listed here
+
+##################
+Uploader Functions
+##################
+
+.. contents::
+  :local:
+
+.. raw:: html
+
+  <div class="custom-index container"></div>
