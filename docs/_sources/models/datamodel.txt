@@ -1,0 +1,12 @@
+.. Function in datamodel model are listed here
+
+###################
+Datamodel Functions
+###################
+
+.. contents::
+  :local:
+
+.. raw:: html
+
+  <div class="custom-index container"></div>

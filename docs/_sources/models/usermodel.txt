@@ -1,0 +1,12 @@
+.. Function in usermodel model are listed here
+
+###################
+Usermodel Functions
+###################
+
+.. contents::
+  :local:
+
+.. raw:: html
+
+  <div class="custom-index container"></div>

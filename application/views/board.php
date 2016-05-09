@@ -1,4 +1,127 @@
-	
+	<script>
+	$(document).ready(function()
+	{
+		//alert('working');
+
+		var ids=[];
+			$(".check").click(function()
+			{
+				if($(".check").is(":checked"))
+				{
+					var done=this.value;
+					ids.push(done);
+                  
+				}
+				console.log(ids);
+				});
+					$("#list li").click(function()
+		{
+			var value=this.value;
+
+			if(value==0)
+			{
+				alert("Please select a suubboard if it exists");
+			}
+			//alert(value);
+			//alert(<?= $this->uri->segment(2) ?>);
+			else
+			{
+				$.ajax({
+					"type":"get",
+					"data":{"id":this.value,"check":ids},
+					"url":"<?=base_url()?>users/boardview/<?=$this->uri->segment(2)?>",
+					"success":function(data)
+					{
+						alert("It has been moved");
+					}
+
+				});
+				alert("The selected items are transferred to another folder");
+			}
+		});
+
+			 $("body").on('click', '.accept', function (e)
+        {
+
+            //var email= <?= $email ?>;
+            var accept_id = this.id;
+            var id = accept_id.substring(6);
+            //alert(id);
+            var email = $("#email").val();
+            //alert(email);
+            $.ajax(
+                    {
+                        "type": "post",
+                        "data": {"accept": id, "email": email},
+                        "url": "<?= base_url() ?>users/invitation",
+                        success: function (msg)
+                        {
+                        	$("#pending").hide();
+                        	$("#accept").show();
+                            
+                            //$(location).attr('href', 'http://zersey.com/board/'+bname);
+                        }
+                    });
+
+
+        });
+
+        $("body").on('click', '.reject', function (e)
+        {
+
+            //var email= <?= $email ?>;
+            var reject_id = this.id;
+            var id = reject_id.substring(6);
+            //alert(id);
+            var email = $("#email").val();
+            //alert(email);
+            $.ajax(
+                    {
+                        "type": "post",
+                        "data": {"reject": id, "email": email},
+                        "url": "<?= base_url() ?>users/invitation",
+                        success: function (msg)
+                        {
+                            //$("#board" + id).remove();
+                            $(location).attr('href', 'http://zersey.com');
+                        }
+                    });
+
+
+        });
+
+        $("body").on('click','.leave', function (e)
+        {
+
+            //var email= <?= $email ?>;
+            var leave_id = this.id;
+            //alert(leave_id);
+            var id = leave_id.substring(5);
+            //alert(id);
+            var email = $("#email_leave").val();
+            //alert(email);
+            $.ajax(
+                    {
+                        "type": "post",
+                        "data": {"leave": id, "email": email},
+                        "url": "<?= base_url() ?>users/invitation",
+                        success: function (msg)
+                        {
+                            //$("#board" + id).remove();
+                            //$(location).attr('href', 'http://zersey.com/board/'+bname);
+                             $(location).attr('href', 'http://zersey.com');
+                        }
+                    });
+
+
+        });
+
+
+			
+
+		//alert("It has been moved");
+	});
+	</script>
 		<div class="row" style="border: solid 2px black;">
 			
 			<!-----middle part-------->
@@ -25,10 +148,24 @@
 							</div>
 							<div style="display: inline-block;width:49%;">
                             <?php $catnm=$this->uri->segment(2);
+                            $catnm=str_replace("%20"," ",$catnm);
 						$cntpost= $this->datamodel->countbordpost($catnm);
 						$cntpost1= $this->datamodel->countofbordfoll($catnm);
+						$uid = $this->session->userdata['user_id'];
+						$user = $this->usermodel->where_data('users', array('id' => $uid));
+//print_r($user[0]->email);
+//$invite_email=$user[0]->email;
+//print_r($email);               
+                            
+						   $boards=$this->usermodel->where_data('user_board',array('bordname'=>$catnm));
+						   
+						   $boardid=$boards[0]->bid;
+
+                            $board = $this->usermodel->where_data('board_invites', array('boardid' =>$boardid , 'email' => $user[0]->email));
+                           echo count($board);
 
 							?>
+
 								<h3 class="middle_user_name"><?= ucfirst($catnm)?></h3>
 								<p class="discription_div"> <?= $cntpost1?> followers  <?= $cntpost?> posts</p>
 							</div>
@@ -72,11 +209,45 @@
                      <?php
 
 						  }
- else
+						  else
 						  {
-						  
+						  	 if($boards[0]->private== 0)
+                            {
 						  ?>
-                          <button class="btn btn-default"style="display:inline-block;"><i class="fa fa-plus"></i>Follow</button><?php	}?>
+                          <button class="btn btn-default"style="display:inline-block;margin-top: 0%;"><i class="fa fa-plus"></i>Follow</button>
+                          <?php }
+                          if(count($board) > 0)
+                          {
+
+
+						  	if($board[0]->status == 0)
+						 	{
+                            	?>
+                            	<div id="pending" style="margin: -9% 0px 0px 249%;width: 100%;">
+                            	 <input type="hidden" id="email" value="<?= $user[0]->email ?>">
+                                    <input type="button" value="Accept" name="Accept" id="accept<?= $boardid ?>" class="accept" style="color:#FFF;background-color:#00F;border-radius:8px;margin-bottom: 23px;padding: 2px 16px;margin-left: 0%;" />
+                                    <input type="button" value="Reject" name="Reject" id="reject<?= $boardid ?>" class="reject" style="color:#000;background-color:#FFF;border-radius: 8px;padding: 2px 16px;" />
+                                    	</div>
+                            	<?php
+                            
+                            }
+                           
+                            if($board[0]->status == 1)
+                            {
+                            		?>
+                            		<div id="accepted" style="margin: -9% 0px 0px 249%;width: 100%;">
+                            		<input type="hidden" id="email_leave" value="<?= $user[0]->email ?>">
+                          <input type="button" class="leave" value="Leave" name="leave" id="leave<?= $boardid ?>"  style="color:#000;background-color:#FFF;border-radius: 8px;padding: 2px 16px;" />
+                            		 </div>
+                            		<?php
+                            }
+                        }
+                             }
+                             ?>
+                             <div id="accept" style="margin: -9% 0px 0px 249%;width: 100%;display: none;">
+                            		<input type="hidden" id="email_leave" value="<?= $user[0]->email ?>">
+                          <input type="button" class="leave" value="Leave" name="leave" id="leave<?= $boardid ?>"  style="color:#000;background-color:#FFF;border-radius: 8px;padding: 2px 16px;" />
+                            		 </div>
 						</div>  
 					</div>
 					<div class="col-lg-4 col-md-4 col-sm-4">
@@ -84,7 +255,7 @@
                         <div>
                         <?php echo $topic; if($topic){ foreach($topic as $tp){?>
 							<a href="" class="btn btn-default topic_content"><?= $tp->name?></a>
-							<?php }}?>
+							<?php }} ?>
                             </div>	
 					</div>
 					
@@ -94,12 +265,13 @@
 			
 				<div class="col-lg-12 col-md-12 col-sm-12" style="border: solid 2px black;">
 						<div class="col-lg-1 col-md-1 col-sm-1">
-								<div><h3 style="text-align:center;"><a href="<?=base_url()?>boards/<?=$catnm?>/<?= $cwt['sbid']?>">Home</h3></div>
+								<div><h3 style="text-align:center;"><a href="<?=base_url()?>board/<?=$catnm?>/<?= $cwt['sbid']?>">Home</h3></div>
 						</div>        
-                          <?php if(count($cat)>5){
+                          <?php if(sizeof($subboard) > 4){
 							  $bids=$cat[0]['boardid'];
-							  $subbod1=$this->datamodel->getsubbod4($bids);
-							  $subbod2=$this->datamodel->getsubbodafter($bids);
+							  //echo $bids;
+							  $subbod1=$this->datamodel->getsubbod4($catidm);
+							  $subbod2=$this->datamodel->getsubbodafter($catidm);
 							  foreach($subbod1 as $cwt){ ?>
 
 						<div class="col-lg-2 col-md-2 col-sm-2">
@@ -107,7 +279,7 @@
 						</div>
                         <?php }
 							   ?>
-							<div class="col-lg-2 col-md-2 col-sm-2" style="margin-top:18px">
+							<div class="col-lg-2 col-md-2 col-sm-2" style="margin-top:18px;margin-left:0%;">
 							<a class="dropdown-toggle" href="#" data-toggle="dropdown" style="color:#777; font-size:22px">
 						+ More
 						<span class="caret"></span></a>
@@ -120,20 +292,62 @@
                                      
 									</ul>
                         </div>
-							<?php } else{ foreach($cat as $ct){ ?>
+							<?php } else{  
+									if(empty($subboard))
+									{
+										?>
+										<div class="col-lg-2 col-md-2 col-sm-2">
+					<div><h3 style="text-align:center;"><a href="<?=base_url()?>boards/<?=$catnm?>/<?= $ct['sbid']?>"> &nbsp; </a></h3></div>
+						</div>
+										<?php
+									}
+							 foreach($subboard as $ct){ ?>
 
 						<div class="col-lg-2 col-md-2 col-sm-2">
-								<div><h3 style="text-align:center;"><a href="<?=base_url()?>boards/<?=$catnm?>/<?= $ct['sbid']?>"><?= $ct['subboardname']?></a></h3></div>
+					<div><h3 style="text-align:center;"><a href="<?=base_url()?>boards/<?=$catnm?>/<?= $ct['sbid']?>"><?=  $ct['subboardname'] ?></a></h3></div>
 						</div>
                         <?php }} ?>
 						
+						<?php if($uid==$user_id)
+						{
+							?>
+
+
+<div class="col-lg-1 col-md-1 col-sm-1">
+
+<div class="dropdown">
+								<a class="dropdown-toggle" href="#" data-toggle="dropdown" > 
+								<img src="<?= base_url() ?>assert/images/icon-folder-128.png" width="40px" height="40px" style="margin:0px 0px 0px -52%" />
+								<span class="caret"></span></a>
+								
+									
+									<ul class="dropdown-menu" name="list" id="list" style="background:#e5e5e5;; color:#fff; margin-left: -66px;">
+									<li value="0"> <a> Move to: </a> </li>
+									<?php foreach($subboard as $sub)
+									{
+									?>
+
+									  <li value="<?= $sub['sbid'] ?>"><a><?=$sub['subboardname'] ?></a></li>
+							<?php
+							}
+							?>			 
+									</ul>
+</div>
+
+</div>
 						<div class="col-lg-1 col-md-1 col-sm-1">
+
+								
 								<div class="dropdown">
-								<i class="fa fa-cog fa-2x dropdown-toggle" data-toggle="dropdown" style="color:#000;margin-top:18px"></i>
+								
+								<a class="dropdown-toggle" href="#" data-toggle="dropdown">
+
+								<i class="fa fa-cog fa-2x dropdown-toggle" style="color:#000;margin-top:5px"></i>	 <span class="caret"></span>	</a>
+								
 									
 									<ul class="dropdown-menu" style="background:#e5e5e5;; color:#fff; margin-left: -66px;">
 									  <li data-toggle="modal" data-target="#addboard"><a href="#">Add new sub-board</a></li>
-									 
+									 <li data-toggle="modal" data-target="#invites"> <a href="#"> Add collaborators </a> </li>
 									</ul>
 									 <div class="modal fade" id="addboard" role="dialog">
     <div class="modal-dialog">
@@ -174,9 +388,58 @@
         <div class="modal-footer">
                              
                  
-                             <input type="button" value="Cancel" class="btn">
+                             <input type="button" value="Cancel" class="btn" data-dismiss="modal">
                           
-                              <input type="submit" value="Save" class="btn"  name="savesubboard"style="background:#993737;color:#fff;">
+                              <input type="submit" value="Save" class="btn"  name="savesubboard" style="background:#993737;color:#fff;">
+                          
+            </div></form>
+     </div>
+      
+    </div>
+  </div>
+
+  							 <div class="modal fade" id="invites" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title" style="color: #000;
+    font-weight: bold;"> ADD COLLABORATORS </h4>
+        </div>
+        <form action="" method="post">
+        <div class="modal-body">
+        <div class="row">
+             <div class="col-lg-12 col-md-12 col-sm-12" style="margin-top:15px;">
+                  <div class="col-lg-4 col-md-4 col-sm-4">
+                       <label for="usr">Email</label>
+                  </div>
+                  <div class="col-lg-8 col-md-8 col-sm-8">
+                  <input type="text" class="form-control" placeholder="Separate multiple email ids with comma" name="emails" id="emails">
+                  </div>
+             </div>
+              <!--<div class="col-lg-12 col-md-12 col-sm-12" style="margin-top:15px;">
+                  <div class="col-lg-4 col-md-4 col-sm-4">
+                       <label for="usr">Description</label>
+                  </div>
+                  <div class="col-lg-8 col-md-8 col-sm-8">
+                     <textarea class="form-control custom-control" rows="3" style="resize:none" placeholder="Waht's Your SubBoard About" name="sbdesc" id="sbdesc"></textarea> 
+                  </div>
+                  </div> 	-->
+                  
+                   
+    
+         </div>
+       </div>
+       
+       
+        <div class="modal-footer">
+                             
+                 
+                             <input type="button" value="Cancel" class="btn" data-dismiss="modal">
+                          
+                              <input type="submit" value="Add" class="btn"  name="collab" style="background:#993737;color:#fff;">
                           
             </div></form>
      </div>
@@ -188,30 +451,45 @@
 
                              </div>
 						</div>
+						<?php
+					}
+					?>
 					</div>
 				</div>
+	
                 <div class="col-lg-12 col-md-12 col-sm-12" style="padding:5px;margin-top:5px;" id="dashboard_image_div">
 					<div class="col-lg-12 col-md-12 col-sm-12" id="container">
 						<?php if(isset($post)){
 							foreach($post as $pt){
-								
+								$pte=$pt['editorial'];
 							?>
 						<div class="grid">
                         <?php 
 						$hed=str_replace(" ","-",$pt['head']);
 						$hed= preg_replace('/[^A-Za-z0-9\-]/', '', $hed);
 						$fhed=substr($hed,0,50);
-						
+						if($pte==1)
+						 {
+							 ?>
+			  <a href="<?= base_url()?>postvieweditorial/<?=$fhed?>/<?= $pt['id']?>" style="text-decoration:none">
+                         <?php 
+
+						 }
+						 else
+						 {
 						?>
                         <a href="<?= base_url()?>postview/<?= $fhed?>/<?= $pt['id']?>" style="text-decoration:none">
+                        <?php
+                    }
+                    ?>
 							<div class="imgholder">
 								<?php
 								$pic=$pt['image'];
 								 if(file_exists("./assets/zerseynme/$pic")){?>
-                                <img src="<?= base_url();?>assets/zerseynme/<?= $pt['image']?>" />
+                                <img src="http://m.zersey.com/assets/zerseynme/<?= $pt['image']?>" />
                               
                                 <?php } else {?>
-                                   <img src="http://zersey.com/assets/zerseynme/<?= $pt['image']?>" />
+                                   <img src="http://m.zersey.com/assets/zerseynme/<?= $pt['image']?>" />
                                  <?php }?>
                                 <p class="card-tag"><?= $pt['maincat']?></p>
 							</div>
@@ -242,19 +520,29 @@
 								?></li>
                             </ul>
                         <h5 style="text-align:justify"><?= $pt['head']?></h5>
+                      <input type="checkbox" name="checkbox" class="check" id="checkbox<?=$pt['id']?>" value="<?= $pt['id'] ?>" />  
 							</div>
 							</div>
-                            
+                            <?php  $photox=$this->usermodel->where_data('customer',array('userId'=>$pt['userid']));
+							
+							$unm=$this->datamodel->getusernamebyid($pt['userid']);
+							 echo $unm;
+							 ?>
 							<div class=" metabtm meta">
-                          <img src="<?php if(($pt['cphto'])){ echo base_url();?>assets/images/merchant/<?php echo $pt['cphto'];} 
-					else { echo base_url().'assets/images/merchant/usericon.jpg'; }?>" style="width:30px;border-radius: 10px;display: inline-block;">
-                    <p style="display:inline-block; padding:5px"><?php if($pt['userid']!='0' && $pt['fulnm']) echo $pt['fulnm']; else echo 'Admin'?></p></div>
+                            <a href="<?= base_url()?>userprofile/<?= $unm->username?>">
+                          <img src="<?php if(isset($photox[0]->photo)){ echo base_url();?>assets/images/merchant/<?php echo $photox[0]->photo;} 
+					else { echo base_url().'assert/images/User_Profile_Pic_Icon.png'; }?>" style="width:30px;border-radius: 10px;display: inline-block;"></a>
+                    <p style="display:inline-block; padding:5px"><a href="<?= base_url()?>userprofile/<?= $unm->username?>"><?php if($pt['userid']!='0') echo $photox[0]->fullname; else echo 'Admin'?></a></p></div>
 						</a>
                         </div>
+
                         <?php }}?>
 						
 					</div>	
 				</div>
+
+				
+
 	</div>
 	 <div id="newpopup" class="modal fade" role="dialog">
             <div class="modal-dialog" style="width: 80%;">
@@ -503,6 +791,7 @@
 			 
 	</script> 
 	
-	
+	 <!-- Google Analytics Code -->
+   <?php include_once("analyticstracking.php") ?>
 </body>
 </html> 

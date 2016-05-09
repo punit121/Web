@@ -43,14 +43,14 @@ class HAuth extends CI_Controller {
 				else{
 				$gender='F';
 				}
-	
+				$random=rand(0,999);
 				$insert['business']='C';
 				$insert['userLevel']=4;
 				$insert['firstName']=$name[0];
 				$insert['lastName']=$name[1];
 				$insert['fullName']=$user_profile->displayName;
 				$insert['email']=$user_profile->email;
-				$insert['username']=$insert['lastName']." ".$insert['firstName'];
+				$insert['username']=$insert['lastName'].$insert['firstName'].$random;
 				$insert['fbgmid']=$user_profile->identifier;
 				$this->db->select('*');
 				$this->db->where('email',$user_profile->email);
@@ -95,7 +95,7 @@ class HAuth extends CI_Controller {
 									'fullName'	=> $user[0]['fullName'],
 									'user_level'=> $user[0]['userLevel'],
 									'reward'	=> $user[0]['reward'],
-									'status'	=> ($user[0]['activated'] == 1) ? STATUS_ACTIVATED : STATUS_NOT_ACTIVATED,
+									'status'	=> ($user[0]['activated'] == 1) ? 'STATUS_ACTIVATED' : 'STATUS_NOT_ACTIVATED',
 							);
 				$this->session->set_userdata($dat);
 						/*
@@ -113,7 +113,8 @@ class HAuth extends CI_Controller {
 			}
 			else { 
 			//var_dump($user_profile);
-			$query=$this->db->query("Select * from `users` where fbgmId=$user_profile->identifier");
+			
+			//$query=$this->db->query("Select * from `users` where fbgmId=$user_profile->identifier");
 			//echo $query->num_rows();
 			$id='';
 			foreach ($query->result_array() as $row)
@@ -137,7 +138,7 @@ class HAuth extends CI_Controller {
 									'fullName'	=> $user[0]['fullName'],
 									'user_level'=> $user[0]['userLevel'],
 									'reward'	=> $user[0]['reward'],
-									'status'	=> ($user[0]['activated'] == 1) ? STATUS_ACTIVATED : STATUS_NOT_ACTIVATED,
+									'status'	=> ($user[0]['activated'] == 1) ? 'STATUS_ACTIVATED' : 'STATUS_NOT_ACTIVATED',
 							);
 				$this->session->set_userdata($dat);
 					redirect('dashboard/');

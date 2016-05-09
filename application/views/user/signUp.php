@@ -105,7 +105,7 @@
 	</div>
 	<div class="sign-up-b">
 	<div class="row margin-top-bottom">
-	<div class="large-12 medium-12 small-12 columns"><h3 class="text-center"><i>Sign Up Now, Its Free!</i></h3></div>
+	<div class="large-12 medium-12 small-12 columns"><h3 class="text-center"><i>Sign Up Now, It's Free!</i></h3></div>
 	</div>
 	<div class="row sign-up">
 	<div class="large-5 medium-5 small-5 columns"><a href="javascript:void(0)" class="button social-icon-facebook" id="facebook" onclick="fblogin();"><span class="icon-facebook"></span>Log In with Facebook</a></div>
@@ -162,7 +162,7 @@
 								<div class="divline"><span></span></div>
 							</li>
 							<li>
-								Envatos Most Wanted - $5,000 Reward for the First 15 Hosting Templates
+								Envato's Most Wanted - $5,000 Reward for the First 15 Hosting Templates
 								<div class="divline"><span></span></div>
 							</li>
 							<li>
