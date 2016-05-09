@@ -131,6 +131,7 @@ $("#imgInp").change(function(){
 });*/
 </script>
 
- 
+  <!-- Google Analytics Code -->
+   <?php include_once("analyticstracking.php") ?>
 </body>
 </html>

@@ -917,6 +917,10 @@ padding-right:0px">
     <script src="<?=base_url();?>newcss/js/bootstrap.min.js"></script>
  <script src="<?=base_url()?>assets/js/jquery.validate.min.js"></script>
 <script src="<?=base_url()?>assets/js/pages/user.js"></script>	
+
+ <!-- Google Analytics Code -->
+   <?php include_once("analyticstracking.php") ?>
+
 </body>
 
 <!--<script type="text/javascript">

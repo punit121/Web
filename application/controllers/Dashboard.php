@@ -16,62 +16,106 @@ class Dashboard extends CI_Controller {
 //put your code here
     function __construct() {
         parent::__construct();
-        /*
-          parse_str( $_SERVER['QUERY_STRING'], $_REQUEST );
-          $CI = & get_instance();
-          $CI->config->load("facebook",TRUE);
-          $config = $CI->config->item('facebook');
-          $this->load->library('facebook', $config);
-         */
+
         /**
          * loading Models
          */
-        $this->load->Model('usermodel');
+        $this->load->model('common');
+        $this->load->model('datamodel');
+        $this->load->model('usermodel');
         /**
          * loading libraries
          */
         $this->load->helper('url');
-        $this->load->library('session');
-// $this->load->library('layout');
+        $this->load->library('layout');
         $this->load->library('form_validation');
-        $this->load->model('usermodel');
-        $this->load->model('datamodel');
         $this->load->helper('form');
-        $this->load->config('email', TRUE);
-        $this->load->helper('cookie');
-        $uid = $this->session->userdata('user_id');
-        session_start();
-        if (!$uid) {
-            $user_id = get_cookie('logininfo');
-            if ($user_id) {
-                $user = $this->datamodel->getuserbyid($user_id);
-                $this->session->set_userdata(array(
-                    'user_id' => $user_id,
-                    'username' => $user->username,
-                    'fullName' => $user->fullName,
-                    'user_level' => $user->userLevel,
-                    'status' => ($user->activated == 1) ? STATUS_ACTIVATED : STATUS_NOT_ACTIVATED,
-                ));
-// redirect('');
-            }
-        }
-
-        if (!$this->input->is_ajax_request()) {
-// if(basename($_SERVER['REQUEST_URI'])!='login')
-// {
-// $newdata = array('url'=>'viewmap/'.basename($_SERVER['REQUEST_URI']));
-// $this->session->set_userdata($newdata);
-// }
-
-            if ($this->session->userdata('logged_in') != TRUE) {
-                $this->load->helper('url');
-                $newdata = array('url' => current_url());
-                $this->session->set_userdata($newdata);
-            } else if (current_url() == base_url()) {
-// redirect('dashboard');
-            }
-        }
+        // $userid = $this->session->userdata['user_id'];
     }
+
+    function index() {
+
+        $userid = $this->session->userdata['user_id'];
+        if (!$userid) {
+            $this->layout->home();
+            return;
+        }
+        $data = array();
+        // echo '<script>console.log("' . $userid . '");</script>';
+        //showing headers
+        $this->load->view('layout/dashboard');
+        $this->load->view('layout/header');
+
+        //setting visits if not available to show user for first time only
+        if (!$this->session->userdata('visits')) {
+            //if the value is null that also is okay
+            // so $visita are either 0 or a number
+            $condition = array('userId' => $userid);
+            $visits = $this->common->fetch_cell('customer', 'visits', $condition);
+            if ($visits == 0) {
+                $this->custom_feed_input();
+            } else {
+                $visits++;
+                $visits_model = array('visits' => $visits);
+                $this->usermodel->updatedata($condition, $visits_model, 'customer');
+                $this->session->set_userdata('visits', $visits);
+            }
+        }
+        //so based on number of visit custome feed input will be shown
+        //for side bars
+        // echo '<script>console.log(' . json_encode($users_not_followed) . ')</script>';
+        $data['ctrl'] = & get_instance();
+        $this->load->view('dashboard/main_dashboard/dashboard', $data);
+    }
+
+    /**
+     * for showing users not followed by the user
+     * this also makes sure they are in order of popularity
+     * optionally passa variable to limit number of such users
+     */
+    public function show_users_not_followed($limit = 5) {
+        $userid = $this->session->userdata('user_id');
+        //follow users not followed
+        $users_not_followed = $this->datamodel->get_users($userid, 'not_followed', 'DESC', $limit);
+        // ids
+        $ids = array_column($users_not_followed, 'userid');
+        //if no ids error occurs
+        if ($ids) {
+            $usernames = $this->common->fetch_where_in('users', 'id,username', 'id', $ids);
+        } else {
+            $usernames = [];
+        }
+        //usernames from another table
+        $usernames = $this->common->fetch_where_in('users', 'id,username', 'id', $ids);
+        $usernames_assoc = array_reduce($usernames, function ($result, $item) {
+            $result[$item['id']] = $item;
+            return $result;
+        }, array());
+        //echo '<script>console.log(' . json_encode($usernames_assoc) . ')</script>';
+        //trying to put username inside users
+        $result = array();
+        foreach ($users_not_followed as $item):
+            $item['username'] = $usernames_assoc[$item['userid']]['username'];
+            $result[] = $item;
+        endforeach;
+        $users_not_followed = $result;
+        $data['users_not_followed'] = $users_not_followed;
+
+        $this->load->view('dashboard/main_dashboard/user_follow', $data);
+
+        /** ----------- follow users not follow end ----------- */
+    }
+
+    public function show_not_followed_categories() {
+        $userid = $this->session->userdata('user_id');
+
+        $not_followed_categories = $this->datamodel->get_categories($userid, 'not_followed', 'DESC', 5);
+        $data['not_followed_categories'] = $not_followed_categories;
+        //need to load data like user not followed and not_category_followed
+        $this->load->view('dashboard/main_dashboard/category_follow', $data);
+    }
+
+    /* ---------------------PHOTOSTORY----------------------------------- */
 
     /**
      * Photostory submission takes care of
@@ -105,10 +149,12 @@ class Dashboard extends CI_Controller {
             'head' => $this->input->post('head'),
             'board' => $this->input->post('board'),
             'category' => $this->input->post('category'),
+            'subboard' => $this->input->post('subboard'),
             'privacy' => $this->input->post('privacy'),
             'scheduled_on' => $scheduler_time,
             'status' => $status
         );
+        //validation rules need to be moved into cofig
 
         $config = array(
             array(
@@ -124,11 +170,6 @@ class Dashboard extends CI_Controller {
             array(
                 'field' => 'head',
                 'label' => 'Title',
-                'rules' => 'required',
-            ),
-            array(
-                'field' => 'board',
-                'label' => 'Board Name',
                 'rules' => 'required',
             ),
             array(
@@ -156,7 +197,9 @@ class Dashboard extends CI_Controller {
         if (count($data['pic_id'] >= 5)) {
 
             if ($this->form_validation->run('photostory_validation_rules') == FALSE) {
-                $errors = $this->form_validation->error_array();
+                $errors = 'Incorrect Data';
+                //on CI 3 Upgradation
+                //$this->form_validation->error_array();
                 $this->session->set_flashdata('validation_data', $data);
                 $this->session->set_flashdata('error_data', $errors);
                 redirect('photostory/form');
@@ -168,15 +211,15 @@ class Dashboard extends CI_Controller {
                 $parsed_intro_model = $this->parse_photostory_intro($data);
                 $data_status = NULL;
 
-                $intro_status = $this->usermodel->insert_data('fbblogmain', $parsed_intro_model);
+                $intro_status = $this->common->insert_data('fbblogmain', $parsed_intro_model);
 
                 //successfully inserted
                 if ($intro_status) {
-                    $data['title'] = $this->usermodel->insert_id();
+                    $data['title'] = $this->common->insert_id();
                     //making title in all arrays
 
                     $parsed_data_model = $this->parse_photostory_data($data);
-                    $data_status = $this->usermodel->insert_batch('fbblog', $parsed_data_model);
+                    $data_status = $this->common->insert_batch('fbblog', $parsed_data_model);
                 }
                 //successfully inserted
                 if ($data_status && $intro_status) {
@@ -207,13 +250,25 @@ class Dashboard extends CI_Controller {
      * of new plugins used in this including editted materialize.js
      *
      */
-    public function photostory_form() {
+    public function photostory_form($category = NULL, $board = NULL, $sub_board = NULL) {
+
+        $userid = $this->session->userdata('user_id');
+        if (!$userid) {
+            redirect('');
+        }
+
+        $data = array(
+            'boradname' => $board,
+            'category' => $category,
+            'subboard' => $subboard
+        );
 
         if ($validation_data = $this->session->flashdata('validation_data')) {
-            echo json_encode($validation_data);
+            // echo json_encode($validation_data);
+            echo '<h1>ERROR WITH DATA</h1>';
         } else {
-            $data = array('title' => 'Photostory');
-            $this->load->view('dashboard/photostory', $data);
+            $this->layout->header_postpage_materialize('post1_materialize');
+            $this->load->view('dashboard/forms/photostory', $data);
         }
     }
 
@@ -264,7 +319,14 @@ class Dashboard extends CI_Controller {
             $parsedData['userid'] = $this->session->userdata('user_id');
             $parsedData['schedulepost'] = $data['scheduled_on'];
             $parsedData['status'] = $data['status'];
-            $parsedData['publish_id'] = $this->usermodel->fetch_maxItem('fbblogmain', 'publish_id') + 1;
+            $parsedData['subboardname'] = $data['subboard'];
+            $parsedData['date'] = date("Y-m-d");
+            $parsedData['createdOn'] = date("Y-m-d H:i:s");
+            //incase we are not publishing right away
+            if ($data['status'] === 1) {
+                $parsedData['publishedOn'] = date("Y-m-d H:i:s");
+                $parsedData['publish_id'] = $this->common->fetch_maxItem('fbblogmain', 'publish_id') + 1;
+            }
 
             foreach ($data['id'] as $id):
                 if ($this->input->post($id)) {
@@ -285,6 +347,318 @@ class Dashboard extends CI_Controller {
             return $parsedData;
         } else {
             return NULL;
+        }
+    }
+
+    /* -----------------------------EDITORIAL--------------------------------- */
+
+    /**
+     * Editorial Has several factors
+     * Showing Board is one among them
+     * Category
+     * User
+     * Heading
+     * Image
+     * Intro description
+     */
+    public function editorial_form($category = NULL, $board = NULL, $sub_board = NULL) {
+
+        $data = array(
+            'boradname' => $board,
+            'category' => $category,
+            'subboard' => $subboard,
+            'pagename' => 'postpage'
+        );
+
+        $userid = $this->session->userdata('user_id');
+        if (!$userid) {
+            redirect('');
+        }
+        //requires from two tables
+        $select = ' userId , customer.fullname , username , photo ';
+        $data['user'] = $this->datamodel->get_user($select, $userid);
+
+        //viewing form
+        $this->layout->view('dashboard/forms/editorial', $data, 'post1');
+    }
+
+    public function editorial_submit() {
+        $userid = $this->session->userdata('user_id');
+        if (!$userid) {
+            echo 'User not logged in logIn first';
+        }
+        $config = array(
+            array(
+                'field' => 'content',
+                'Label' => 'Content',
+                'rules' => 'required|min_length[1000]'
+            ),
+            array(
+                'field' => 'head',
+                'label' => 'Title',
+                'rules' => 'required|min_length[10]',
+            ),
+            array(
+                'field' => 'category',
+                'label' => 'Category',
+                'rules' => 'required',
+            ),
+            array(
+                'field' => 'image',
+                'label' => 'Picture Id',
+                'rules' => 'required',
+            ),
+            array(
+                'field' => 'privacy',
+                'label' => 'Privacy',
+                'rules' => 'required',
+            )
+        );
+        //setting form validation
+        $this->form_validation->set_rules($config);
+
+        //parsing data for db operation
+        $parsedData['boardname'] = $this->input->post('board');
+        $parsedData['head'] = $this->input->post('head');
+        $parsedData['maincat'] = $this->input->post('category');
+        $parsedData['shareas'] = $this->input->post('privacy');
+        $parsedData['userid'] = $this->session->userdata('user_id');
+        $parsedData['status'] = 1;
+        if ($this->input->post('draft')) {
+            $parsedData['status'] = 3;
+        } else if ($this->input->post('scheduled')) {
+            $parsedData['status'] = 3;
+            $parsedData['schedulepost'] = $this->input->post('scheduleDate');
+        } else {
+            //if no other case only
+            $parsedData['publish_id'] = $this->common->fetch_maxItem('fbblogmain', 'publish_id') + 1;
+            $parsedData['publishedOn'] = date("Y-m-d H:i:s");
+        }
+        $parsedData['editorial'] = 1;
+        $parsedData['image'] = $this->input->post('image');
+        $parsedData['intro'] = $this->input->post('content');
+        $parsedData['img_credits'] = $this->input->post('img_creds');
+        $parsedData['subboardname'] = $this->input->post('subboard');
+        $parsedData['date'] = date("Y-m-d");
+        $parsedData['createdOn'] = date("Y-m-d H:i:s");
+
+
+
+
+        if ($this->form_validation->run('photostory_validation_rules') == FALSE) {
+            echo validation_errors();
+        } else {
+            //now save data to db here
+            $status = $this->common->insert_data('fbblogmain', $parsedData);
+
+            if ($status) {
+                echo 'success';
+            } else {
+                echo 'Error While writing data to DB';
+            }
+        }
+    }
+
+    /* ---------------------PHOTOSTORY END----------------------------------- */
+    /* ---------------------CATEGORY SELECTION
+     *                        CUSTOM FEED INPUT------------------------------ */
+
+    /**
+     * Custom feed input
+     * is specified as the selection of category
+     * and users to follow which will help create
+     * the necessary custom feeds
+     */
+    public function custom_feed_input() {
+        //several functionalities in this function will be later to be split for
+        //reuse , for example recommended users
+
+        /** --------fetch categories which are most popular and downward----- */
+        //output is expected to be an array of data
+        // based on number of rows
+        $userid = $this->session->userdata('user_id');
+
+        if ($userid) {
+            //categories can now be accessed from main cat
+            $not_followed_categories = $this->datamodel->get_categories($userid, 'not_followed', 'DESC');
+            $followed_categories = $this->datamodel->get_categories($userid, 'followed', 'DESC');
+            $users_not_followed = $this->datamodel->get_users($userid, 'not_followed', 'DESC', 20);
+            $users_followed = $this->datamodel->get_users($userid, 'followed', 'DESC', 5);
+            //echo '<script>console.log(' . json_encode($not_followed_categories) . ')</script>';
+            //pass it down to input selection
+            $data['users_not_followed'] = $users_not_followed;
+            $data['users_followed'] = $users_followed;
+            $data['followed_categories'] = $followed_categories;
+            $data['not_followed_categories'] = $not_followed_categories;
+            $this->load->view('dashboard/custom_feed_input', $data);
+        } else {
+            echo '<script>console.log("no custom input");</script>';
+        }
+    }
+
+    /**
+     * This is used to follow a particular category
+     * by a user, single cateegory through ajax at a time
+     */
+    function follow_category() {
+
+        //prepping data
+        $data['userid'] = $this->session->userdata('user_id');
+        $data['catid'] = $this->input->post('cid');
+        $a = NULL;
+        //need to have a look at this function
+        if ($this->input->post('status') == 'follow') {
+            $a = $this->common->insert_data('follow_category', $data);
+        } else
+        if ($this->input->post('status') == 'un_follow') {
+            $a = $this->common->delete_data('follow_category', $data);
+        }
+
+        if ($a) {
+            echo 'success';
+        } else {
+            echo 'error';
+        }
+    }
+
+    /**
+     * follow single user by session user
+     */
+    function follow_user() {
+
+        //prepping data
+        $data['userid'] = $this->session->userdata('user_id');
+        $data['usid'] = $this->input->post('user_id');
+        $a = NULL;
+        //need to have a look at this function
+        if ($this->input->post('status') === 'follow') {
+            $a = $this->common->insert_data('follow_user', $data);
+        } else
+        if ($this->input->post('status') === 'un_follow') {
+            $a = $this->common->delete_data('follow_user', $data);
+        }
+
+        if ($a) {
+            echo 'success';
+        } else {
+            echo 'error';
+        }
+    }
+
+    /* --------------------CUSTOM FEED OUTPUT---------------------------- */
+
+    /**
+     * outputs custom feeds based on time and limit
+     * also accepts a param stats  for getting
+     * latest and older posts
+     * @param type $stat
+     */
+    public function custom_feeds($stat = 'latest') {
+        //lpid is last post id
+        $last_date = $this->input->get('last_date');
+        $database_offset = 0;
+        $last_date = (int) ($last_date + $database_offset);
+        $limit = $this->input->get('limit'); //number of posts
+        $userid = $this->session->userdata('user_id'); //user id
+        $data['feeds'] = array();
+        if ($userid) {
+            //stat means latest or older
+            $feeds = $this->datamodel->custom_feeds($userid, $last_date, $stat, $limit);
+            //array of userids
+            $data['feeds'] = $feeds;
+            echo json_encode($data);
+        } else {
+            //need to show some error
+            echo json_encode($data);
+        }
+    }
+
+    /**
+     * feeds based on category
+     */
+    public function category_feeds($stat = 'latest') {
+        //lpid is last post id
+        $last_date = $this->input->get('last_date');
+        $database_offset = 0;
+        $last_date = (int) ($last_date + $database_offset);
+        $category = $this->input->get('category');
+        $limit = $this->input->get('limit'); //number of posts
+        $userid = $this->session->userdata('user_id'); //user id
+        $data['feeds'] = array();
+        if ($userid) {
+            //stat means latest or older
+            $feeds = $this->datamodel->category_feeds($category, $last_date, $stat, $limit);
+            //array of userids
+            $data['feeds'] = $feeds;
+            echo json_encode($data);
+        } else {
+            //need to show some error
+            echo json_encode($data);
+        }
+    }
+
+    /**
+     * feeds based on user
+     *
+     * based on private public we may need some classifications later on
+     */
+    public function user_feeds($stat = 'latest') {
+        //lpid is last post id
+        $last_date = $this->input->get('last_date');
+        $database_offset = 0;
+        //dont confuse it with the current user
+        //this is the user which we are requesting for
+        $req_userid = $this->input->get('userid');
+        $last_date = (int) ($last_date + $database_offset);
+        $limit = $this->input->get('limit'); //number of posts
+        //id of user using this
+        $userid = $this->session->userdata('user_id'); //user id
+        $data['feeds'] = array();
+        if ($userid) {
+            //stat means latest or older
+            $feeds = $this->datamodel->user_feeds($req_userid, $last_date, $stat, $limit);
+            //array of userids
+            $data['feeds'] = $feeds;
+            echo json_encode($data);
+        } else {
+            //need to show some error
+            echo json_encode($data);
+        }
+    }
+
+    /**
+     * Counting latest feeds that needs to be updated
+     */
+    public function count_feeds() {
+        $number_of_posts = 0;
+        $database_offset = 45000;
+        $userid = $this->session->userdata('user_id');
+        $last_date = (int) ($this->input->get('data ') || 0) + $database_offset;
+        echo $this->datamodel->count_feeds($userid, $last_date);
+    }
+
+    /**
+     * confirming custom feed input
+     */
+    public function custom_feed_input_confirm() {
+        //userid to check the authenticity of user
+        $userid = $this->session->userdata('user_id');
+        if (!$userid) {
+            echo 'error';
+        } else {
+            //funny to confirm jesus
+            $confirm = $this->input->post('confirm');
+            if ($confirm == 'jesus') {
+                $condition = array('userId' => $userid);
+                $visits = $this->common->fetch_cell('customer', 'visits', $condition);
+                $visits++;
+                $visits_model = array('visits' => $visits);
+                $this->usermodel->updatedata($condition, $visits_model, 'customer');
+                $this->session->set_userdata('visits', $visits);
+                echo 'success';
+            } else {
+                echo 'error';
+            }
         }
     }
 

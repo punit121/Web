@@ -1,0 +1,12 @@
+.. Users controller functions are described here 
+
+###############
+Users Functions
+###############
+
+.. contents::
+  :local:
+
+.. raw:: html
+
+  <div class="custom-index container"></div>

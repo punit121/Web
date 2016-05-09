@@ -179,5 +179,7 @@ jQuery(document).ready(function() {
 
 <!-- Initialize JS Plugins -->
 <script src="js/app-bottom-calls.js"></script>
+ <!-- Google Analytics Code -->
+   <?php include_once("analyticstracking.php") ?>
 </body>
 </html> 

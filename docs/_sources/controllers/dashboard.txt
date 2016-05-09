@@ -1,0 +1,26 @@
+.. Functions in uploader Class in Controller will be listed here
+
+###################
+Dashboard Functions
+###################
+
+Dashboard Class is used for managing functionalities related to dashboard
+and to present the dashboard itself before the user. Dashboard can only be 
+accessbile to a user who is logged in as well as dashboard functions are only 
+made visible to users having sessions login present with their cookies 
+
+.. contents::
+  :local:
+
+.. raw:: html
+
+  <div class="custom-index container"></div>
+
+
+Contructor
+==========
+
+   .. php:function:: _construct()
+   
+   Mainly loads all useful libraries ,models and helper classes for the entire class
+

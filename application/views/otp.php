@@ -1,3 +1,42 @@
+<!--<script>
+
+function otp()
+{
+	var otp=document.getElementById("otp").value;
+	if(otp=="")
+	{
+		document.getElementById("msg").innerHTML='Please Enter your OTP';
+		document.getElementById("msg").style.color="red";
+		return false;
+	}
+
+	else
+	{
+		return true;
+	}
+}
+ function validate()
+{
+	return otp();
+}
+</script>
+
+
+<h2> Please Do not Refresh this page </h2>
+	<form action="<?= base_url();?>auth/verify_otp/<?php echo $plivo ?>/" method="POST" onsubmit="return validate()">
+   <div class = "col-sm-4"></div>
+<div class = "col-sm-4 text-center" style = "border: 1px solid #999; border-radius: 6px; margin-top: 100px; padding-bottom:20px">
+   <h3>Please Enter The OTP</h3>
+   <div id="msg"> &nbsp; </div>
+<div class="form-group">
+    <input type="password" name="otp" class="form-control" id="otp" placeholder="Enter OTP"/>
+    <input type="hidden" name="mobile" class="form-control" id="mobile" value="<?php echo $mobno; ?>">
+</div>
+<h5>Did not receive OTP?</h5>
+<a href="<?=base_url();?>auth/resend_otp/<?php echo $mobno; ?>"><input type="button" class="btn btn-danger btn-block" name="resend" value="Resend OTP" style="width: 200px; margin-left: 112px"/></a>
+   <input type="submit" class="btn btn-success btn-block" name="submit" value="Confirm OTP" style="width: 200px; margin-left: 112px"/>
+</div>
+</form>-->
 <html>
 <head>
 <style>
